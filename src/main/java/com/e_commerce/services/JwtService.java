@@ -40,7 +40,7 @@ public class JwtService {
 
         String generatedToken = jwtUtil.generateToken(userDetails);
 
-        User user = userDao.findByUserName(jwtRequest.getCardNumber()).get(0);
+        User user = userDao.findByLiquorCardNumberOrGroceryCardNumber(jwtRequest.getCardNumber(),jwtRequest.getCardNumber()).get(0);
         return JwtResponse.builder()
                 .jwtToken(generatedToken)
                 .user(user)

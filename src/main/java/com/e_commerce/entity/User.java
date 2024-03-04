@@ -41,7 +41,7 @@ public class User  implements UserDetails {
     private String liquorCardNumber;
     private String groceryCardNumber;
     private String dob;
-//    private String password;
+    private String password;
     private Long otp;
     private boolean isVerified;
 

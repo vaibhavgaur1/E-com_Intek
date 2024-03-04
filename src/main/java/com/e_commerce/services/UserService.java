@@ -24,9 +24,9 @@ public class UserService {
 
     public User registerNewUser(RegisterDto registerDto) throws Exception {
 
-        List<User> dbListUser = userDao.findByUserName(registerDto.getName());
-        if(!dbListUser.isEmpty())
-            throw new Exception("User with id: "+registerDto.getName()+" is already present");
+//        List<User> dbListUser = userDao.findByLiquorCardNumberOrGroceryCardNumber(registerDto.getName());
+//        if(!dbListUser.isEmpty())
+//            throw new Exception("User with id: "+registerDto.getName()+" is already present");
 
         List<User> userCard1 = userDao.findByLiquorCardNumber(registerDto.getLiquorCardNumber());
         if(!userCard1.isEmpty())
@@ -50,6 +50,8 @@ public class UserService {
         roleSet.add(dbRole);
 
         User user = User.builder()
+                .firstName(registerDto.getFirstName())
+                .lastName(registerDto.getLastName())
                 .contactNumber(registerDto.getContactNumber())
                 .adhaar(registerDto.getAdhaar())
                 .liquorCardNumber(registerDto.getLiquorCardNumber())
@@ -69,26 +71,26 @@ public class UserService {
     }
 
 
-//    public void initRoleAndUser() {
-//
-//        if(!roleDao.findAll().isEmpty() && !userDao.findAll().isEmpty() )
-//            return ;
-//
-//        Role adminRole = Role.builder()
-//                .roleName("ADMIN")
-//                .roleDescription("ADMIN ROLE")
-//                .build();
-//        Role userRole = Role.builder()
-//                .roleName("USER")
-//                .roleDescription("USER ROLE")
-//                .build();
-//
-//        roleDao.save(adminRole);
-//        roleDao.save(userRole);
-//
-//        Set<Role> adminRoles = Set.of(adminRole);
-//        Set<Role> userRoles = Set.of(userRole);
-//
+    public void initRoleAndUser() {
+
+        if(!roleDao.findAll().isEmpty() && !userDao.findAll().isEmpty() )
+            return ;
+
+        Role adminRole = Role.builder()
+                .roleName("ADMIN")
+                .roleDescription("ADMIN ROLE")
+                .build();
+        Role userRole = Role.builder()
+                .roleName("USER")
+                .roleDescription("USER ROLE")
+                .build();
+
+        roleDao.save(adminRole);
+        roleDao.save(userRole);
+
+        Set<Role> adminRoles = Set.of(adminRole);
+        Set<Role> userRoles = Set.of(userRole);
+
 //        User user = User.builder()
 //                .userName("user@gmail.com")
 //                .firstName("user")
@@ -106,16 +108,17 @@ public class UserService {
 //                .build();
 //        userDao.save(admin);
 //        userDao.save(user);
-//    }
+    }
 
     public boolean verifyOtp(OtpDto otpDto) {
         User user =null;
         List<User> dbUserList= null;
-        if (otpDto.getCardType().equalsIgnoreCase("liqour"))
+        if (otpDto.getCardType().equalsIgnoreCase("liquor"))
             dbUserList= userDao.findByLiquorCardNumber(otpDto.getCardNumber());
         else
             dbUserList = userDao.findByGroceryCardNumber(otpDto.getCardNumber());
 
+        user= dbUserList.get(0);
         Long otp = user.getOtp();
 
         if(otp.equals(otpDto.getOtp())){

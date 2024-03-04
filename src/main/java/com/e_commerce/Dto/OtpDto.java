@@ -3,7 +3,8 @@ package com.e_commerce.Dto;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter@Getter
+@Setter
+@Getter
 public class OtpDto {
 
     private String cardNumber;

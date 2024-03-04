@@ -22,6 +22,6 @@ public class ECommerceApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-//		userService.initRoleAndUser();
+		userService.initRoleAndUser();
 	}
 }

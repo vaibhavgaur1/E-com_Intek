@@ -21,7 +21,7 @@ public class HelperUtils {
         }
         String jwtToken= authToken.substring(7);
         String username = jwtUtil.extractUsername(jwtToken);
-        List<User> dbUserList = userDao.findByUserName(username);
+        List<User> dbUserList = userDao.findByLiquorCardNumberOrGroceryCardNumber(username,username);
         if(dbUserList.isEmpty()){
             throw new Exception("you are not registered!");
         }
