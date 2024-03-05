@@ -8,7 +8,8 @@ import java.sql.Date;
 @Setter
 public class LoginDto {
 
+    private String cardType;
     private String cardNumber;
-    private Date dob;
+//    private Date dob;
     private String password;
 }

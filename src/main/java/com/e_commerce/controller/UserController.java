@@ -35,11 +35,12 @@ public class UserController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<JwtResponse> createJwtToken(
-            @RequestBody JwtRequest jwtRequest
+            @RequestBody JwtRequest jwtRequest,
+            @RequestHeader("cardType") String cardType
 //            @RequestParam(value = "loginType", defaultValue = "by-pass") String loginType
     ) throws Exception {
         System.out.println("controller");
-        return ResponseEntity.ok(jwtService.createJwtToken(jwtRequest ));
+        return ResponseEntity.ok(jwtService.createJwtToken(jwtRequest, cardType ));
     }
 
 }

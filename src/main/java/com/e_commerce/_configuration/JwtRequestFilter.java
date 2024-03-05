@@ -32,6 +32,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String header = request.getHeader("Authorization");
+        final String cardType = request.getHeader("cardType");
         String jwtToken = null;
         String username = null;
         if (header != null && header.startsWith("Bearer ")) {
@@ -51,7 +52,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailService.userDetailsService().loadUserByUsername(username);
+            UserDetails userDetails = userDetailService.userDetailsService().loadUserByUsername(username+"-"+cardType);
 
             if (jwtUtil.isTokenValid(jwtToken, userDetails)) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();

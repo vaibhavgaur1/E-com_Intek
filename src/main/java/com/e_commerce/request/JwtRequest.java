@@ -7,4 +7,6 @@ public class JwtRequest {
 
     private String cardNumber;
     private String userPassword;
+    private String cardType;
+
 }

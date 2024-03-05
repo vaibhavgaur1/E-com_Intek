@@ -22,13 +22,13 @@ public class JwtService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailService userDetailService;
 
-    public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
+    public JwtResponse createJwtToken(JwtRequest jwtRequest, String cardType) throws Exception {
 
         System.out.println("JWT_REQUEST: "+jwtRequest);
 
         try{
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    jwtRequest.getCardNumber(), jwtRequest.getUserPassword()
+                    jwtRequest.getCardNumber()+"-"+cardType, jwtRequest.getUserPassword()
             ));
         }catch (DisabledException e){
             throw new Exception("user is disabled");
@@ -36,11 +36,13 @@ public class JwtService {
             throw new Exception("bad credentials from user");
         }
         UserDetails userDetails = userDetailService.userDetailsService()
-                .loadUserByUsername(jwtRequest.getCardNumber());
+                .loadUserByUsername(jwtRequest.getCardNumber()+"-"+cardType);
 
         String generatedToken = jwtUtil.generateToken(userDetails);
 
-        User user = userDao.findByLiquorCardNumberOrGroceryCardNumber(jwtRequest.getCardNumber(),jwtRequest.getCardNumber()).get(0);
+        User user= (User) userDetails;
+
+//        User user = userDao.findByLiquorCardNumberOrGroceryCardNumber(jwtRequest.getCardNumber(),jwtRequest.getCardNumber()).get(0);
         return JwtResponse.builder()
                 .jwtToken(generatedToken)
                 .user(user)

@@ -8,6 +8,7 @@ import com.e_commerce.dao.RoleDao;
 import com.e_commerce.dao.UserDao;
 import com.e_commerce.entity.Role;
 import com.e_commerce.entity.User;
+import com.github.javafaker.Faker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -73,8 +74,8 @@ public class UserService {
 
     public void initRoleAndUser() {
 
-        if(!roleDao.findAll().isEmpty() && !userDao.findAll().isEmpty() )
-            return ;
+//        if(!roleDao.findAll().isEmpty() && !userDao.findAll().isEmpty() )
+//            return ;
 
         Role adminRole = Role.builder()
                 .roleName("ADMIN")
@@ -90,6 +91,28 @@ public class UserService {
 
         Set<Role> adminRoles = Set.of(adminRole);
         Set<Role> userRoles = Set.of(userRole);
+
+        for (int i = 0; i < 1000; i++) {
+
+            User user= User.builder()
+                    .firstName("vaibhav")
+                    .lastName("vaibhav")
+                    .isVerified(true)
+                    .otp(OTPGenerator.generateOtp())
+                    .pan("CGZPG447A"+i)
+                    .adhaar("512348956785"+i)
+                    .dob(new Date()+"")
+                    .groceryCardNumber("Gc5946231587"+i)
+                    .liquorCardNumber("LQ8569325147"+i)
+                    .contactNumber("6598231475")
+                    .userPassword("vaibhav")
+                    .roles(userRoles)
+                    .build();
+
+            userDao.save(user);
+        }
+
+
 
 //        User user = User.builder()
 //                .userName("user@gmail.com")

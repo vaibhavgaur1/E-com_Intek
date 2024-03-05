@@ -11,10 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +22,18 @@ public class UserDetailService {
 
     public UserDetailsService userDetailsService(){
         return cardNumber -> {
-            List<User> users = userDao.findByLiquorCardNumberOrGroceryCardNumber(cardNumber, cardNumber);
+            String[] split = cardNumber.split("-");
+            cardNumber= split[0];
+            String cardType= split[1];
+
+            System.out.println(Arrays.toString(split));
+
+            List<User> users = null;
+            if(cardType.equalsIgnoreCase("liquor")){
+                users =  userDao.findByLiquorCardNumber(cardNumber);
+            }else
+                users =  userDao.findByGroceryCardNumber(cardNumber);
+//            users = userDao.findByLiquorCardNumberOrGroceryCardNumber(cardNumber, cardNumber);
             if(users.isEmpty()){
                 throw new UsernameNotFoundException("user not found");
             }
