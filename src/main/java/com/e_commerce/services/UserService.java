@@ -4,12 +4,14 @@ import com.e_commerce.Dto.OtpDto;
 import com.e_commerce.Dto.RegisterDto;
 import com.e_commerce._util.EmailService;
 import com.e_commerce._util.OTPGenerator;
+import com.e_commerce.dao.OtpDao;
 import com.e_commerce.dao.RoleDao;
 import com.e_commerce.dao.UserDao;
+import com.e_commerce.entity.Otp;
 import com.e_commerce.entity.Role;
 import com.e_commerce.entity.User;
-import com.github.javafaker.Faker;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ public class UserService {
     private final RoleDao roleDao;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final OtpDao otpDao;
 
     public User registerNewUser(RegisterDto registerDto) throws Exception {
 
@@ -51,8 +54,7 @@ public class UserService {
         roleSet.add(dbRole);
 
         User user = User.builder()
-                .firstName(registerDto.getFirstName())
-                .lastName(registerDto.getLastName())
+                .name(registerDto.getName())
                 .contactNumber(registerDto.getContactNumber())
                 .adhaar(registerDto.getAdhaar())
                 .liquorCardNumber(registerDto.getLiquorCardNumber())
@@ -62,12 +64,12 @@ public class UserService {
                 .groceryCardNumber(registerDto.getGroceryCardNumber())
                 .userPassword(passwordEncoder.encode(registerDto.getPassword()))
                 .roles(roleSet)
-                .otp(OTPGenerator.generateOtp())
-                .isVerified(false)
+//                .otp(OTPGenerator.generateOtp())
+                .isVerified(true)
                 .build();
 
         User save = userDao.save(user);
-        emailService.sendOtpMail(user.getOtp());
+        emailService.sendOtpMail(user.getOtp(), registerDto.getEmail());
         return save;
     }
 
@@ -92,25 +94,25 @@ public class UserService {
         Set<Role> adminRoles = Set.of(adminRole);
         Set<Role> userRoles = Set.of(userRole);
 
-        for (int i = 0; i < 1000; i++) {
-
-            User user= User.builder()
-                    .firstName("vaibhav")
-                    .lastName("vaibhav")
-                    .isVerified(true)
-                    .otp(OTPGenerator.generateOtp())
-                    .pan("CGZPG447A"+i)
-                    .adhaar("512348956785"+i)
-                    .dob(new Date()+"")
-                    .groceryCardNumber("Gc5946231587"+i)
-                    .liquorCardNumber("LQ8569325147"+i)
-                    .contactNumber("6598231475")
-                    .userPassword("vaibhav")
-                    .roles(userRoles)
-                    .build();
-
-            userDao.save(user);
-        }
+//        for (int i = 0; i < 1000; i++) {
+//
+//            User user= User.builder()
+//                    .firstName("vaibhav")
+//                    .lastName("vaibhav")
+//                    .isVerified(true)
+//                    .otp(OTPGenerator.generateOtp())
+//                    .pan("CGZPG447A"+i)
+//                    .adhaar("512348956785"+i)
+//                    .dob(new Date()+"")
+//                    .groceryCardNumber("Gc5946231587"+i)
+//                    .liquorCardNumber("LQ8569325147"+i)
+//                    .contactNumber("6598231475")
+//                    .userPassword("vaibhav")
+//                    .roles(userRoles)
+//                    .build();
+//
+//            userDao.save(user);
+//        }
 
 
 
@@ -133,22 +135,25 @@ public class UserService {
 //        userDao.save(user);
     }
 
-    public boolean verifyOtp(OtpDto otpDto) {
-        User user =null;
-        List<User> dbUserList= null;
-        if (otpDto.getCardType().equalsIgnoreCase("liquor"))
-            dbUserList= userDao.findByLiquorCardNumber(otpDto.getCardNumber());
-        else
-            dbUserList = userDao.findByGroceryCardNumber(otpDto.getCardNumber());
+    @SneakyThrows
+    public String generateOtp(OtpDto otpDto) {
+        try {
+            Otp otp = new Otp();
+            Long aLong = OTPGenerator.generateOtp();
+            otp.setEmail(otpDto.getGmail());
+            otp.setOtp(aLong);
+            otpDao.save(otp);
 
-        user= dbUserList.get(0);
-        Long otp = user.getOtp();
-
-        if(otp.equals(otpDto.getOtp())){
-            user.setVerified(true);
-            userDao.save(user);
-            return true;
+            emailService.sendOtpMail(aLong, otpDto.getGmail());
+            return "OTP sent to your email.. please check ";
+        } catch (Exception e) {
+            throw new Exception("something went wrong ");
         }
-        return false;
+
     }
+
+    public String verifyOtp(String email){
+
+//        otpDao.find
+//    }
 }

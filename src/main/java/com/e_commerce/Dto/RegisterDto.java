@@ -8,12 +8,12 @@ import lombok.Setter;
 
 public class RegisterDto {
 
-    private String firstName;
-    private String lastName;
+    private String name;
+//    private String lastName;
     private String pan;
     private String adhaar;
     private String email;
-    private String name;
+//    private String name;
     private String contactNumber;
     private String liquorCardNumber;
     private String groceryCardNumber;

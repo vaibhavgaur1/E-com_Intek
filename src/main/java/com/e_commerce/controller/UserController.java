@@ -27,8 +27,8 @@ public class UserController {
 
     @PostMapping("/otpVerify")
     public ResponseEntity<String> verifyOtp(@RequestBody OtpDto otpDto) {
-        String message= userService.verifyOtp(otpDto)? "otp verified": "otp can not be verified";
-        return ResponseEntity.ok(message);
+//        String message= ? "otp verified": "otp can not be verified";
+        return ResponseEntity.ok(userService.generateOtp(otpDto));
     }
 
     private final JwtService jwtService;
@@ -42,5 +42,6 @@ public class UserController {
         System.out.println("controller");
         return ResponseEntity.ok(jwtService.createJwtToken(jwtRequest, cardType ));
     }
+
 
 }

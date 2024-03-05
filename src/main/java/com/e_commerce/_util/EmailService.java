@@ -35,7 +35,7 @@ public class EmailService {
         return true;
     }
 
-    public void sendOtpMail(Long otp){
+    public void sendOtpMail(Long otp, String gmail){
 
     }
 }
