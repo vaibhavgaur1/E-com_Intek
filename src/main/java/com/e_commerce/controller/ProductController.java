@@ -1,5 +1,6 @@
 package com.e_commerce.controller;
 
+import com.e_commerce.Dto.ProductDto;
 import com.e_commerce.entity.ImageModel;
 import com.e_commerce.entity.Product;
 import com.e_commerce.services.ProductService;
@@ -52,7 +53,7 @@ public class ProductController {
     }
 
 
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    //    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getAllProducts")
     public List<Product> getAllProducts(@RequestParam(defaultValue = "0")Integer pageNumber,
                                         @RequestParam(defaultValue = "6")Integer pageSize,
@@ -62,7 +63,7 @@ public class ProductController {
         return productService.getAllProducts(pageNumber, pageSize, searchKey);
     }
 
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    //    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getProductById/{productId}")
     public Product getProductById( @PathVariable Integer productId){
         return productService.getProductById(productId);
@@ -71,7 +72,7 @@ public class ProductController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/deleteProductDetails/{productId}")
     public void deleteProductDetails(@PathVariable Integer productId) {
-         productService.deleteProductDetails(productId);
+        productService.deleteProductDetails(productId);
     }
 
     @PreAuthorize("hasAuthority('USER')")
@@ -84,4 +85,13 @@ public class ProductController {
         return productService.getProductDetails(isSingleProductCheckout, productId, authHeader);
     }
 
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping(value = "/add-product", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<ProductDto> addProduct(
+            @RequestPart("productDto") ProductDto productDto,
+            @RequestPart("imageFiles")MultipartFile[] files) throws IOException {
+        productDto.setProductImages(multiPartToImageModel(files));
+        return ResponseEntity.ok(productService.addProduct(productDto));
+    }
 }

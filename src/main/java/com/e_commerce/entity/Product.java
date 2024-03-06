@@ -1,5 +1,7 @@
 package com.e_commerce.entity;
 
+import com.e_commerce.Dto.ProductDto;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,4 +39,20 @@ public class Product {
             }
     )
     private Set<ImageModel> productImages;
+
+    @ManyToOne
+    @JsonManagedReference
+    private Category category;
+
+    public ProductDto getDto() {
+        return ProductDto.builder()
+                .productId(productId)
+                .productName(productName)
+                .productDescription(productDescription)
+                .productDiscountedPrice(productDiscountedPrice)
+                .productActualPrice(productActualPrice)
+                .productImages(productImages)
+                .categoryId(category.getId())
+                .build();
+    }
 }

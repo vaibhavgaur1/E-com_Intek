@@ -10,7 +10,8 @@ import java.util.Optional;
 
 public interface OtpDao  extends JpaRepository<Otp, String> {
 
-    Optional<Otp> findByEmail(String email);
+    List<Otp> findByEmail(String email);
 
 
+    int deleteByEmail(String email);
 }

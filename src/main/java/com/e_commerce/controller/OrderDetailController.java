@@ -26,7 +26,7 @@ public class OrderDetailController {
             @RequestHeader("Authorization") String authToken) throws Exception {
 
         System.out.println("isSingleProductCheckout: "+isSingleProductCheckout);
-       return  orderDetailService.placeOrder(orderInput, authToken, isSingleProductCheckout);
+        return  orderDetailService.placeOrder(orderInput, authToken, isSingleProductCheckout);
     }
 
     @PreAuthorize("hasAuthority('USER')")

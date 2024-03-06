@@ -60,7 +60,7 @@ public class OrderDetailService {
                 dbListCart.stream().filter(cart -> cart.getProduct().getProductId() == dbProduct.getProductId()).forEach(cartDao::delete);
             }
 
-             detailList.add(orderDetailDao.save(orderDetail));
+            detailList.add(orderDetailDao.save(orderDetail));
         });
         return detailList;
     }

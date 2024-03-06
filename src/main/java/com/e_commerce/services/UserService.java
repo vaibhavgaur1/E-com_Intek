@@ -24,9 +24,16 @@ public class UserService {
     private final RoleDao roleDao;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-    private final OtpDao otpDao;
+    private final OtpDao otpRepository;
 
     public User registerNewUser(RegisterDto registerDto) throws Exception {
+
+        List<Otp> otpbyEmail = otpRepository.findByEmail(registerDto.getEmail());
+        if(otpbyEmail.isEmpty()){
+            throw new Exception("your email: "+registerDto.getEmail()+" has not been verified");
+        }
+        if(!otpbyEmail.get(0).isVerified())
+            throw new Exception("your email: "+registerDto.getEmail()+" has not been verified");
 
 //        List<User> dbListUser = userDao.findByLiquorCardNumberOrGroceryCardNumber(registerDto.getName());
 //        if(!dbListUser.isEmpty())
@@ -49,12 +56,13 @@ public class UserService {
             throw new Exception("User with pan: "+registerDto.getPan()+" is already present");
 
 
-        Role dbRole = roleDao.findById("USER").orElseThrow(()-> new Exception(""));
+        Role dbRole = roleDao.findById("USER").orElseThrow(()-> new Exception("Role not found"));
         Set<Role> roleSet= new HashSet<>();
         roleSet.add(dbRole);
 
         User user = User.builder()
-                .name(registerDto.getName())
+                .firstName(registerDto.getFirstName())
+                .lastName(registerDto.getLastName())
                 .contactNumber(registerDto.getContactNumber())
                 .adhaar(registerDto.getAdhaar())
                 .liquorCardNumber(registerDto.getLiquorCardNumber())
@@ -64,20 +72,23 @@ public class UserService {
                 .groceryCardNumber(registerDto.getGroceryCardNumber())
                 .userPassword(passwordEncoder.encode(registerDto.getPassword()))
                 .roles(roleSet)
-//                .otp(OTPGenerator.generateOtp())
+                .otp(registerDto.getOtp())
                 .isVerified(true)
                 .build();
 
         User save = userDao.save(user);
-        emailService.sendOtpMail(user.getOtp(), registerDto.getEmail());
+        emailService.sendWelcomeMail(user.getOtp(), registerDto.getEmail());
         return save;
     }
 
 
     public void initRoleAndUser() {
 
-//        if(!roleDao.findAll().isEmpty() && !userDao.findAll().isEmpty() )
-//            return ;
+        int i = userDao.updatePassForAll(passwordEncoder.encode("vaibhav"));
+        System.out.println("pass changed: "+ i);
+
+        if(!roleDao.findAll().isEmpty() && !userDao.findAll().isEmpty() )
+            return ;
 
         Role adminRole = Role.builder()
                 .roleName("ADMIN")
@@ -112,7 +123,7 @@ public class UserService {
 //                    .build();
 //
 //            userDao.save(user);
-//        }
+    }
 
 
 
@@ -133,27 +144,53 @@ public class UserService {
 //                .build();
 //        userDao.save(admin);
 //        userDao.save(user);
-    }
+
 
     @SneakyThrows
-    public String generateOtp(OtpDto otpDto) {
-        try {
-            Otp otp = new Otp();
-            Long aLong = OTPGenerator.generateOtp();
-            otp.setEmail(otpDto.getGmail());
-            otp.setOtp(aLong);
-            otpDao.save(otp);
+    public boolean verifyOtp(OtpDto otpDto) {
 
-            emailService.sendOtpMail(aLong, otpDto.getGmail());
-            return "OTP sent to your email.. please check ";
-        } catch (Exception e) {
-            throw new Exception("something went wrong ");
-        }
+        List<Otp> otpbyEmail = otpRepository.findByEmail(otpDto.getEmail());
+        if(otpbyEmail.isEmpty())
+            throw new Exception("otp has not been generated before!!");
 
+        Otp otp = otpbyEmail.get(0);
+
+        if(otp.getOtp().equals(otpDto.getOtp())){
+            otp.setVerified(true);
+            otpRepository.save(otp);
+            return true;
+        }else
+            return false;
     }
 
-    public String verifyOtp(String email){
+//        User user =null;
+//        List<User> dbUserList= null;
+//        if (otpDto.getCardType().equalsIgnoreCase("liquor"))
+//            dbUserList= userDao.findByLiquorCardNumber(otpDto.getCardNumber());
+//        else
+//            dbUserList = userDao.findByGroceryCardNumber(otpDto.getCardNumber());
+//        user= dbUserList.get(0);
+//        Long otp = user.getOtp();
+//
+//        if(otp.equals(otpDto.getOtp())){
+//            user.setVerified(true);
+//            userDao.save(user);
+//            return true;
+//        }
+//        return false;
 
-//        otpDao.find
-//    }
+
+    public String generateOtp(String email) {
+        System.out.println(otpRepository.deleteByEmail(email));;
+        Long l = OTPGenerator.generateOtp();
+        Otp otp = Otp.builder()
+//                81680   DHQ11
+                .otp(l)
+                .email(email)
+                .build();
+        otpRepository.save(otp);
+        emailService.sendOtpMail(l, email);
+
+        return "otp has been sent to entered mail";
+    }
 }

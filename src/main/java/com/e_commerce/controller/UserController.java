@@ -19,19 +19,25 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final JwtService jwtService;
 
     @PostMapping("/registerNewUser")
     public User registerNewUser(@RequestBody RegisterDto registerDto) throws Exception {
         return userService.registerNewUser(registerDto);
     }
 
-    @PostMapping("/otpVerify")
-    public ResponseEntity<String> verifyOtp(@RequestBody OtpDto otpDto) {
-//        String message= ? "otp verified": "otp can not be verified";
-        return ResponseEntity.ok(userService.generateOtp(otpDto));
+    @GetMapping("/generate-otp")
+    public ResponseEntity<String> generateOtp(@RequestParam("email") String email){
+        return ResponseEntity.ok(userService.generateOtp(email));
     }
 
-    private final JwtService jwtService;
+    @PostMapping("/otpVerify")
+    public ResponseEntity<String> verifyOtp(@RequestBody OtpDto otpDto) {
+        String message= userService.verifyOtp(otpDto)? "otp verified": "otp can not be verified";
+        return ResponseEntity.ok(message);
+    }
+
+
 
     @PostMapping("/authenticate")
     public ResponseEntity<JwtResponse> createJwtToken(
@@ -42,6 +48,5 @@ public class UserController {
         System.out.println("controller");
         return ResponseEntity.ok(jwtService.createJwtToken(jwtRequest, cardType ));
     }
-
 
 }

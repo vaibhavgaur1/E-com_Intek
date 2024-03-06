@@ -24,9 +24,9 @@ public class User  implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String name;
-//    private String lastName;
-//    private String userName;
+    private String firstName;
+    private String lastName;
+    //    private String userName;
     private String userPassword;
 
     @Column(unique = true)
@@ -34,7 +34,7 @@ public class User  implements UserDetails {
     @Column(unique = true)
     private String adhaar;
     private String email;
-//    private String name;
+    //    private String name;
     @Column(length = 10)
     private String contactNumber;
     @Column(unique = true)
@@ -94,7 +94,7 @@ public class User  implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isVerified;
+        return true;
     }
 
 
