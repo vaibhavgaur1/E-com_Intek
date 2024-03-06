@@ -33,7 +33,8 @@ public class SecurityConfiguration {
             "/authenticate", "/registerNewUser"
             , "/product/getAllProducts",
 //            "/product/deleteProductDetails/{productId}",
-            "/product/getProductById/{productId}","/otpVerify"
+            "/product/getProductById/{productId}","/otpVerify",
+            "/generate-otp"
     },
     ADMIN_URL={
             "/admin"

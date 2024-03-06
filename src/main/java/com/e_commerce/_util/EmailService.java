@@ -35,7 +35,11 @@ public class EmailService {
         return true;
     }
 
-    public void sendOtpMail(Long otp, String gmail){
+    public void sendOtpMail(Long otp, String email){
+
+    }
+
+    public void sendWelcomeMail(Long otp, String email) {
 
     }
 }
