@@ -52,7 +52,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return;
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailService.userDetailsService().loadUserByUsername(username+"-"+cardType);
+            UserDetails userDetails = userDetailService.userDetailsService().loadUserByUsername(username);//+"-"+cardType
 
             if (jwtUtil.isTokenValid(jwtToken, userDetails)) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();

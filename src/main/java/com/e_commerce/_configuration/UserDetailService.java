@@ -22,24 +22,28 @@ public class UserDetailService {
 
     public UserDetailsService userDetailsService(){
         return cardNumber -> {
-            String[] split = cardNumber.split("-");
-            cardNumber= split[0];
-            String cardType= split[1];
+//            String[] split = cardNumber.split("-");
+//            cardNumber= split[0];
+//            String cardType= split[1];
 
-            System.out.println(Arrays.toString(split));
+//            System.out.println(Arrays.toString(split));
 
             List<User> users = null;
-            if(cardType.equalsIgnoreCase("liquor")){
-                users =  userDao.findByLiquorCardNumber(cardNumber);
-            }else
-                users =  userDao.findByGroceryCardNumber(cardNumber);
+            System.out.println(cardNumber);
+
+            users= userDao.findByLiquorCardNumberOrGroceryCardNumber(cardNumber, cardNumber);
+
+//            if(cardType.equalsIgnoreCase("liquor")){
+//                users =  userDao.findByLiquorCardNumber(cardNumber);
+//            }else
+//                users =  userDao.findByGroceryCardNumber(cardNumber);
 //            users = userDao.findByLiquorCardNumberOrGroceryCardNumber(cardNumber, cardNumber);
             if(users.isEmpty()){
                 throw new UsernameNotFoundException("user not found");
             }
             User user= users.get(0);
             if(user == null){
-                throw new UsernameNotFoundException("user not found");
+                throw new UsernameNotFoundException("user is null");
             }
 //            System.out.println(users.get(0));
 //            System.out.println("userDetailsService()::: AUTHORIZED");

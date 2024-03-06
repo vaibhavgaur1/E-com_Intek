@@ -86,7 +86,7 @@ public class ProductController {
     }
 
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/add-product", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ProductDto> addProduct(
             @RequestPart("productDto") ProductDto productDto,

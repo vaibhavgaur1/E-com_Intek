@@ -1,13 +1,16 @@
 package com.e_commerce.services.impl;
 
 import com.e_commerce.Dto.CategoryDto;
+import com.e_commerce.Dto.ProductDto;
 import com.e_commerce.dao.CategoryRepository;
+import com.e_commerce.dao.ProductDao;
 import com.e_commerce.entity.Category;
 import com.e_commerce.services.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,6 +18,7 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ProductDao productDao;
 
     @SneakyThrows
     @Override
@@ -38,10 +42,21 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAllCategories() {
-        return categoryRepository.findAll()
-                .stream()
-                .map(Category::getDto)
-                .toList();
+
+        List<Category> all = categoryRepository.findAll();
+        List<CategoryDto> list = new ArrayList<>();
+        all.forEach(category -> {
+            list.add(
+                    CategoryDto.builder()
+                            .id(category.getId())
+                            .name(category.getName())
+                            .description(category.getDescription())
+                            .totalProducts(productDao.countByColumnName(category.getId()))
+                            .build()
+            );
+
+        });
+        return list;
     }
 
     @Override

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 public class OtpDto {
 
-    private String Email;
+    private String email;
     private Long otp;
 //    private String cardType;
 }
