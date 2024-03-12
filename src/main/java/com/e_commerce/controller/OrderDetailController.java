@@ -3,12 +3,14 @@ package com.e_commerce.controller;
 import com.e_commerce.entity.OrderDetail;
 import com.e_commerce.request.OrderInput;
 import com.e_commerce.services.OrderDetailService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
@@ -53,5 +55,15 @@ public class OrderDetailController {
     @GetMapping("/markOrderAsNotDelivered/{orderId}")
     public void markOrderAsNotDelivered(@PathVariable Integer orderId) throws Exception {
         orderDetailService.markOrderAsNotDelivered(orderId);
+    }
+    @GetMapping("/pdf")
+    public void returnPdf(HttpServletResponse response) throws Exception {
+        Map<String, Object> stringObjectMap= orderDetailService.getPdf();
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment;filename=sample.pdf");
+        byte[] pdfBytes = (byte[])stringObjectMap.get("pdfBytes");
+
+        response.getOutputStream().write(pdfBytes);
     }
 }

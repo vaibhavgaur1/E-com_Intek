@@ -1,5 +1,6 @@
 package com.e_commerce.services;
 
+import com.e_commerce._util.Bill;
 import com.e_commerce._util.HelperUtils;
 import com.e_commerce._util.JwtUtil;
 import com.e_commerce.dao.CartDao;
@@ -12,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,7 @@ public class OrderDetailService {
     private final JwtUtil jwtUtil;
     private final HelperUtils helperUtils;
     private final CartDao cartDao;
+    private final Bill billGenerator;
 
 
 
@@ -95,5 +99,14 @@ public class OrderDetailService {
 
         dbOrderDetail.setOrderStatus("NOT_DELIVERED");
         orderDetailDao.save(dbOrderDetail);
+    }
+    public Map<String, Object> getPdf() {
+
+        Map<String, Object> response = new HashMap<>();
+
+        byte[] pdfBytes = billGenerator.generateBillByteArray();
+        response.put("pdfBytes", pdfBytes);
+        response.put("message", "PDF generated");
+        return response;
     }
 }

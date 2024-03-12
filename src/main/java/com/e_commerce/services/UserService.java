@@ -1,15 +1,20 @@
 package com.e_commerce.services;
 
+import com.e_commerce.Dto.AddressDto;
 import com.e_commerce.Dto.OtpDto;
 import com.e_commerce.Dto.RegisterDto;
 import com.e_commerce._util.EmailService;
 import com.e_commerce._util.OTPGenerator;
+import com.e_commerce.dao.AddressDao;
 import com.e_commerce.dao.OtpDao;
 import com.e_commerce.dao.RoleDao;
 import com.e_commerce.dao.UserDao;
+import com.e_commerce.entity.Address;
 import com.e_commerce.entity.Otp;
 import com.e_commerce.entity.Role;
 import com.e_commerce.entity.User;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +30,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final OtpDao otpRepository;
+    private  final AddressDao addressDao;
 
     public User registerNewUser(RegisterDto registerDto) throws Exception {
 
@@ -61,8 +67,7 @@ public class UserService {
         roleSet.add(dbRole);
 
         User user = User.builder()
-                .firstName(registerDto.getFirstName())
-                .lastName(registerDto.getLastName())
+                .name(registerDto.getName())
                 .contactNumber(registerDto.getContactNumber())
                 .adhaar(registerDto.getAdhaar())
                 .liquorCardNumber(registerDto.getLiquorCardNumber())
@@ -71,6 +76,7 @@ public class UserService {
                 .pan(registerDto.getPan())
                 .groceryCardNumber(registerDto.getGroceryCardNumber())
                 .userPassword(passwordEncoder.encode(registerDto.getPassword()))
+                .password(registerDto.getPassword())
                 .roles(roleSet)
                 .otp(registerDto.getOtp())
                 .isVerified(true)
@@ -84,11 +90,11 @@ public class UserService {
 
     public void initRoleAndUser() {
 
-        int i = userDao.updatePassForAll(passwordEncoder.encode("vaibhav"));
-        System.out.println("pass changed: "+ i);
+//        int i = userDao.updatePassForAll(passwordEncoder.encode("vaibhav"));
+//        System.out.println("pass changed: "+ i);
 
-        if(!roleDao.findAll().isEmpty() && !userDao.findAll().isEmpty() )
-            return ;
+//        if(!roleDao.findAll().isEmpty() && !userDao.findAll().isEmpty() )
+//            return ;
 
         Role adminRole = Role.builder()
                 .roleName("ADMIN")
@@ -192,5 +198,47 @@ public class UserService {
         emailService.sendOtpMail(l, email);
 
         return "otp has been sent to entered mail";
+    }
+
+    @SneakyThrows
+    public AddressDto addAddress(AddressDto addressDto) {
+        User dbUser = userDao.findById(addressDto.getUserId())
+                .orElseThrow(() -> new Exception("User Not Found"));
+        Address address= Address.builder()
+                .flatNumberOrHouseNumber(addressDto.getFlatNumberOrHouseNumber())
+                .area(addressDto.getArea())
+                .landMark(addressDto.getLandMark())
+                .city(addressDto.getCity())
+                .state(addressDto.getState())
+                .addressType(addressDto.getAddressType())
+                .user(dbUser)
+                .build();
+
+        Address save = addressDao.save(address);
+//        AddressDto addressDto1 = new AddressDto();
+        AddressDto addressDto1 = AddressDto.builder()
+        .flatNumberOrHouseNumber(save.getFlatNumberOrHouseNumber())
+                .id(save.getId())
+                .userId(save.getUser().getId())
+                .area(save.getArea())
+                .landMark(save.getLandMark())
+                .city(save.getCity())
+                .state(save.getState())
+                .addressType(save.getAddressType())
+                .build();
+        return addressDto1;
+
+
+    }
+
+    public List<AddressDto> getUserAddress(Integer userId) {
+        if (userDao.existsById(userId)){
+            return addressDao.findByUserId(userId)
+                    .stream()
+                    .map(Address::getDto)
+                    .toList();
+        }else{
+            return Collections.emptyList();
+        }
     }
 }

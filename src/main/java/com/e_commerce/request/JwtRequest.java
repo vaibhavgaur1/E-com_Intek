@@ -2,7 +2,12 @@ package com.e_commerce.request;
 
 import lombok.*;
 
-@Getter@Setter@AllArgsConstructor@NoArgsConstructor@Builder@ToString
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class JwtRequest {
 
     private String cardNumber;

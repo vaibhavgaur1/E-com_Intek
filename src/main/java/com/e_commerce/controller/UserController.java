@@ -1,5 +1,6 @@
 package com.e_commerce.controller;
 
+import com.e_commerce.Dto.AddressDto;
 import com.e_commerce.Dto.OtpDto;
 import com.e_commerce.Dto.RegisterDto;
 import com.e_commerce.entity.User;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -48,5 +51,18 @@ public class UserController {
         System.out.println("controller");
         return ResponseEntity.ok(jwtService.createJwtToken(jwtRequest, cardType ));
     }
+    @PostMapping("/addAddress")
+    public ResponseEntity<AddressDto> addAddress(@RequestBody AddressDto addressDto) {
+//        String message= userService.addAddress(addressDto)? "Address Added": "Something Went Wrong";
+        return ResponseEntity.ok(userService.addAddress(addressDto));
+    }
+
+    @GetMapping("/getAddress/{userId}")
+    public ResponseEntity<List<AddressDto>>  getAddress(@PathVariable Integer userId ) {
+//        String message= userService.getUserAddress(addressDto)? "Address Added": "Something Went Wrong";
+        return ResponseEntity.ok(userService.getUserAddress(userId));
+    }
+
+
 
 }

@@ -1,19 +1,19 @@
 package com.e_commerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table
 @Builder
@@ -24,8 +24,8 @@ public class User  implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String firstName;
-    private String lastName;
+    private String name;
+//    private String lastName;
     //    private String userName;
     private String userPassword;
 
@@ -44,6 +44,9 @@ public class User  implements UserDetails {
     private String password;
     private Long otp;
     private boolean isVerified;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @JsonManagedReference
+    private List<Address> address;
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
@@ -96,6 +99,7 @@ public class User  implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 
 
 }
