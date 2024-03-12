@@ -56,14 +56,14 @@ public class OrderDetailController {
     public void markOrderAsNotDelivered(@PathVariable Integer orderId) throws Exception {
         orderDetailService.markOrderAsNotDelivered(orderId);
     }
-    @GetMapping("/pdf")
-    public void returnPdf(HttpServletResponse response) throws Exception {
-        Map<String, Object> stringObjectMap= orderDetailService.getPdf();
-
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment;filename=sample.pdf");
-        byte[] pdfBytes = (byte[])stringObjectMap.get("pdfBytes");
-
-        response.getOutputStream().write(pdfBytes);
-    }
+//    @GetMapping("/pdf")
+//    public void returnPdf(HttpServletResponse response) throws Exception {
+//        Map<String, Object> stringObjectMap= orderDetailService.getPdf();
+//
+//        response.setContentType("application/pdf");
+//        response.setHeader("Content-Disposition", "attachment;filename=sample.pdf");
+//        byte[] pdfBytes = (byte[])stringObjectMap.get("pdfBytes");
+//
+//        response.getOutputStream().write(pdfBytes);
+//    }
 }

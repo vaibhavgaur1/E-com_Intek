@@ -100,13 +100,13 @@ public class OrderDetailService {
         dbOrderDetail.setOrderStatus("NOT_DELIVERED");
         orderDetailDao.save(dbOrderDetail);
     }
-    public Map<String, Object> getPdf() {
-
-        Map<String, Object> response = new HashMap<>();
-
-        byte[] pdfBytes = billGenerator.generateBillByteArray();
-        response.put("pdfBytes", pdfBytes);
-        response.put("message", "PDF generated");
-        return response;
-    }
+//    public Map<String, Object> getPdf() {
+//
+//        Map<String, Object> response = new HashMap<>();
+//
+//        byte[] pdfBytes = billGenerator.generateBillByteArray();
+//        response.put("pdfBytes", pdfBytes);
+//        response.put("message", "PDF generated");
+//        return response;
+//    }
 }
