@@ -75,7 +75,7 @@ public class Bill {
                         .setBorder(Border.NO_BORDER)
                 );
 
-                headerTable.addCell(new Cell().add(" Contact us: 1800 208 9898 " + )
+                headerTable.addCell(new Cell().add(" Contact us: 1800 208 9898 " )
                         .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderBottom(Border.NO_BORDER)
                 );
                 headerTable.addCell(new Cell().add(" email: vaibhavgaur801945@gmail.comdasd ")

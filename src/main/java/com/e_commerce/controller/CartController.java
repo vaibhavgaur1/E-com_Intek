@@ -19,9 +19,7 @@ public class CartController {
 
     @GetMapping("/addToCart/{productId}")
     @PreAuthorize("hasAuthority('USER')")
-    public Cart addToCart(@PathVariable Integer productId,
-                                          @RequestHeader("Authorization") String authHeader
-                          ) throws Exception {
+    public Cart addToCart(@PathVariable Integer productId,@RequestHeader("Authorization") String authHeader) throws Exception {
         return cartService.addToCart(productId, authHeader);
     }
 

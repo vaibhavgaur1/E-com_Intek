@@ -5,10 +5,16 @@ import com.e_commerce.Dto.OtpDto;
 import com.e_commerce.Dto.RegisterDto;
 import com.e_commerce.entity.User;
 import com.e_commerce.request.JwtRequest;
+import com.e_commerce.request.LoginRequest;
+import com.e_commerce.response.ApiResponse;
 import com.e_commerce.response.JwtResponse;
+import com.e_commerce.response.LoginResponce;
 import com.e_commerce.services.JwtService;
+import com.e_commerce.services.LoginService;
 import com.e_commerce.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
+    @Autowired
+    private LoginService loginService;
     private final UserService userService;
     private final JwtService jwtService;
 
@@ -62,7 +70,10 @@ public class UserController {
 //        String message= userService.getUserAddress(addressDto)? "Address Added": "Something Went Wrong";
         return ResponseEntity.ok(userService.getUserAddress(userId));
     }
-
+    @PostMapping("/authenticate1")
+    public ResponseEntity<ApiResponse<LoginResponce>> getLoginData(@RequestBody LoginRequest loginrequest) throws Exception {
+        return new ResponseEntity<>(loginService.getLoginData(loginrequest), HttpStatus.OK);
+    }
 
 
 }
