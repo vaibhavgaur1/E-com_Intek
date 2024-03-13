@@ -33,7 +33,7 @@ public class LoginServiceImpl implements LoginService {
         LoginResponce loginResponce = new LoginResponce();
         try{
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    loginrequest.getPassword(), loginrequest.getPassword()
+                    loginrequest.getCardNo(), loginrequest.getPassword()
             ));
         }catch (DisabledException e){
             throw new Exception("user is disabled");
@@ -47,9 +47,6 @@ public class LoginServiceImpl implements LoginService {
 
         loginResponce.setToken(generatedToken);
         loginResponce.setMessage("Success");
-
-
-
         return ResponseUtils.createSuccessResponse(loginResponce, new TypeReference<LoginResponce>() {
         });
     }

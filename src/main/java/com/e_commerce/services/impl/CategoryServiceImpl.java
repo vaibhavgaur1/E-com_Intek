@@ -1,11 +1,13 @@
 package com.e_commerce.services.impl;
 
 import com.e_commerce.Dto.CategoryDto;
-import com.e_commerce.Dto.ProductDto;
+import com.e_commerce._util.ResponseUtils;
 import com.e_commerce.dao.CategoryRepository;
 import com.e_commerce.dao.ProductDao;
 import com.e_commerce.entity.Category;
+import com.e_commerce.response.ApiResponse;
 import com.e_commerce.services.CategoryService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @SneakyThrows
     @Override
-    public CategoryDto addCategory(CategoryDto categoryDto) {
+    public ApiResponse<CategoryDto> addCategory(CategoryDto categoryDto) {
 
         Boolean isExists= categoryRepository.existsByName(categoryDto.getName());
 
@@ -33,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .description(categoryDto.getDescription())
                 .build();
         try{
-            return categoryRepository.save(category).getDto();
+            return ResponseUtils.createSuccessResponse(categoryRepository.save(category).getDto(), new TypeReference<CategoryDto>() {});
         }catch (Exception e){
             throw new Exception("something went wrong");
         }
@@ -41,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDto> getAllCategories() {
+    public ApiResponse<List<CategoryDto>> getAllCategories() {
 
         List<Category> all = categoryRepository.findAll();
         List<CategoryDto> list = new ArrayList<>();
@@ -56,17 +58,17 @@ public class CategoryServiceImpl implements CategoryService {
             );
 
         });
-        return list;
+        return ResponseUtils.createSuccessResponse(list, new TypeReference<List<CategoryDto>>() {});
     }
 
     @Override
-    public List<String> getAllCategoriesNamesOnly() {
-        return categoryRepository.getAllCategoriesNamesOnly();
+    public ApiResponse<List<String>> getAllCategoriesNamesOnly() {
+        return ResponseUtils.createSuccessResponse(categoryRepository.getAllCategoriesNamesOnly(), new TypeReference<List<String>>() {});
     }
 
     @SneakyThrows
     @Override
-    public CategoryDto updateCategory(CategoryDto categoryDto) {
+    public ApiResponse<CategoryDto> updateCategory(CategoryDto categoryDto) {
 
         Category category = categoryRepository.findById(categoryDto.getId())
                 .orElseThrow(() -> new Exception("category doesn't exists"));
@@ -74,6 +76,6 @@ public class CategoryServiceImpl implements CategoryService {
         category.setName(categoryDto.getName());
         category.setDescription(categoryDto.getDescription());
 
-        return categoryRepository.save(category).getDto();
+        return ResponseUtils.createSuccessResponse(categoryRepository.save(category).getDto(), new TypeReference<CategoryDto>() {});
     }
 }

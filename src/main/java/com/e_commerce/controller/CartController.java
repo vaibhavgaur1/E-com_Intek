@@ -1,9 +1,10 @@
 package com.e_commerce.controller;
 
 import com.e_commerce.entity.Cart;
+import com.e_commerce.response.ApiResponse;
 import com.e_commerce.services.CartService;
+import com.e_commerce.services.impl.CartServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class CartController {
 
     @GetMapping("/addToCart/{productId}")
     @PreAuthorize("hasAuthority('USER')")
-    public Cart addToCart(@PathVariable Integer productId,@RequestHeader("Authorization") String authHeader) throws Exception {
+    public ApiResponse<Cart> addToCart(@PathVariable Integer productId, @RequestHeader("Authorization") String authHeader) throws Exception {
         return cartService.addToCart(productId, authHeader);
     }
 
@@ -32,7 +33,7 @@ public class CartController {
 
     @GetMapping("/getCartDetailsOfUser")
     @PreAuthorize("hasAuthority('USER')")
-    public List<Cart> getCartDetailsOfUser(@RequestHeader("Authorization") String authHeader) throws Exception {
+    public ApiResponse<List<Cart>> getCartDetailsOfUser(@RequestHeader("Authorization") String authHeader) throws Exception {
         return cartService.getCartDetailsOfUser(authHeader);
     }
 }

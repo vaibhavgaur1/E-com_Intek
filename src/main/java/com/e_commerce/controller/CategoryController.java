@@ -1,6 +1,7 @@
 package com.e_commerce.controller;
 
 import com.e_commerce.Dto.CategoryDto;
+import com.e_commerce.response.ApiResponse;
 import com.e_commerce.services.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,23 +20,23 @@ public class CategoryController {
 
 //    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/add-category")
-    public ResponseEntity<CategoryDto> addCategory(@RequestBody CategoryDto categoryDto){
+    public ResponseEntity<ApiResponse<CategoryDto>> addCategory(@RequestBody CategoryDto categoryDto){
         return ResponseEntity.ok(categoryService.addCategory(categoryDto));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping("/add-category")
-    public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto){
+    public ResponseEntity<ApiResponse<CategoryDto>> updateCategory(@RequestBody CategoryDto categoryDto){
         return ResponseEntity.ok(categoryService.updateCategory(categoryDto));
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<CategoryDto>> getAllCategories(){
+    public ResponseEntity<ApiResponse<List<CategoryDto>>> getAllCategories(){
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     @GetMapping("/categories-name")
-    public ResponseEntity<List<String>> getAllCategoriesNamesOnly(){
+    public ResponseEntity<ApiResponse<List<String>>> getAllCategoriesNamesOnly(){
         return ResponseEntity.ok(categoryService.getAllCategoriesNamesOnly());
     }
 }

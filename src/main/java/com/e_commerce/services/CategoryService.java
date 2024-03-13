@@ -1,17 +1,18 @@
 package com.e_commerce.services;
 
 import com.e_commerce.Dto.CategoryDto;
+import com.e_commerce.response.ApiResponse;
 
 import java.util.List;
 
 public interface CategoryService {
 
 
-    CategoryDto addCategory(CategoryDto categoryDto);
+    ApiResponse<CategoryDto> addCategory(CategoryDto categoryDto);
 
-    List<CategoryDto> getAllCategories();
+    ApiResponse<List<CategoryDto>> getAllCategories();
 
-    List<String> getAllCategoriesNamesOnly();
+    ApiResponse<List<String>> getAllCategoriesNamesOnly();
 
-    CategoryDto updateCategory(CategoryDto categoryDto);
+    ApiResponse<CategoryDto> updateCategory(CategoryDto categoryDto);
 }

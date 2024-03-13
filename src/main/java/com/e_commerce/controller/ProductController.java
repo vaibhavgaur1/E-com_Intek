@@ -3,7 +3,9 @@ package com.e_commerce.controller;
 import com.e_commerce.Dto.ProductDto;
 import com.e_commerce.entity.ImageModel;
 import com.e_commerce.entity.Product;
+import com.e_commerce.response.ApiResponse;
 import com.e_commerce.services.ProductService;
+import com.e_commerce.services.impl.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class ProductController {
 
 //    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Product> saveProduct(
+    public ResponseEntity<ApiResponse<Product>> saveProduct(
             @RequestPart("product") Product product,
             @RequestPart("imageFiles")MultipartFile[] files) throws Exception {
         try{
@@ -55,9 +57,9 @@ public class ProductController {
 
     //    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getAllProducts")
-    public List<Product> getAllProducts(@RequestParam(defaultValue = "0")Integer pageNumber,
-                                        @RequestParam(defaultValue = "6")Integer pageSize,
-                                        @RequestParam(defaultValue = "")String searchKey
+    public ApiResponse<List<Product>> getAllProducts(@RequestParam(defaultValue = "0")Integer pageNumber,
+                                                     @RequestParam(defaultValue = "6")Integer pageSize,
+                                                     @RequestParam(defaultValue = "")String searchKey
     ){
         System.out.println(searchKey);
         return productService.getAllProducts(pageNumber, pageSize, searchKey);
@@ -65,7 +67,7 @@ public class ProductController {
 
     //    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getProductById/{productId}")
-    public Product getProductById( @PathVariable Integer productId){
+    public ApiResponse<Product> getProductById(@PathVariable Integer productId){
         return productService.getProductById(productId);
     }
 
@@ -77,7 +79,7 @@ public class ProductController {
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/getProductDetails/{isSingleProductCheckout}/{productId}")
-    public List<Product> getProductDetails(
+    public ApiResponse<List<Product>> getProductDetails(
             @PathVariable(name = "isSingleProductCheckout") Boolean isSingleProductCheckout,
             @PathVariable(name = "productId") Integer productId,
             @RequestHeader("Authorization") String authHeader
@@ -88,7 +90,7 @@ public class ProductController {
 
 //    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/add-product", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ProductDto> addProduct(
+    public ResponseEntity<ApiResponse<ProductDto>> addProduct(
             @RequestPart("productDto") ProductDto productDto,
             @RequestPart("imageFiles")MultipartFile[] files) throws IOException {
         productDto.setProductImages(multiPartToImageModel(files));

@@ -2,15 +2,14 @@ package com.e_commerce.controller;
 
 import com.e_commerce.entity.OrderDetail;
 import com.e_commerce.request.OrderInput;
+import com.e_commerce.response.ApiResponse;
 import com.e_commerce.services.OrderDetailService;
-import jakarta.servlet.http.HttpServletResponse;
+import com.e_commerce.services.impl.OrderDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
@@ -22,7 +21,7 @@ public class OrderDetailController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/placeOrder/{isSingleProductCheckout}")
-    public List<OrderDetail> placeOrder(
+    public ApiResponse<List<OrderDetail>> placeOrder(
             @PathVariable Boolean isSingleProductCheckout,
             @RequestBody OrderInput orderInput,
             @RequestHeader("Authorization") String authToken) throws Exception {
@@ -33,7 +32,7 @@ public class OrderDetailController {
 
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/getOrderDetailsOfUser")
-    public List<OrderDetail> getOrderDetailsOfUser(
+    public ApiResponse<List<OrderDetail>> getOrderDetailsOfUser(
             @RequestHeader("Authorization") String authToken) throws Exception
     {
         return orderDetailService.getOrderDetailsOfUser(authToken);
@@ -41,7 +40,7 @@ public class OrderDetailController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getAllOrderDetailsOfAdmin/{status}")
-    public List<OrderDetail> getAllOrderDetailsOfAdmin(@PathVariable String status) {
+    public ApiResponse<List<OrderDetail>> getAllOrderDetailsOfAdmin(@PathVariable String status) {
         System.out.println(status);
         return orderDetailService.getAllOrderDetailsOfAdmin(status);
     }
