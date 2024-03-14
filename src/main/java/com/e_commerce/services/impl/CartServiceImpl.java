@@ -23,7 +23,7 @@ public class CartServiceImpl implements CartService {
     private final ProductDao productDao;
     private final HelperUtils helperUtils;
     public ApiResponse<Cart> addToCart(Integer productId, String authHeader) throws Exception {
-        Product dbProduct = productDao.findById(productId).get();
+        Product dbProduct = productDao.findById(productId).orElseThrow(()-> new Exception("no product found"));
         User dbUser = helperUtils.getUserFromAuthToken(authHeader);
 
         List<Cart> dbListCartOfUser = cartDao.findByUser(dbUser);

@@ -3,10 +3,7 @@ package com.e_commerce.Dto;
 import com.e_commerce.entity.Category;
 import com.e_commerce.entity.ImageModel;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +24,9 @@ public class ProductDto {
     private Double productDiscountedPrice;
     private Double productActualPrice;
     private Set<ImageModel> productImages;
+    private byte[] image;
+
+
 
     private Long categoryId;
 }

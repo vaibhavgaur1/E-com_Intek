@@ -21,7 +21,7 @@ public class OrderDetailController {
 
     private final OrderDetailService orderDetailService;
 
-//    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/placeOrder/{isSingleProductCheckout}")
     public ApiResponse<List<OrderDetail>> placeOrder(
             @PathVariable Boolean isSingleProductCheckout,
@@ -40,7 +40,7 @@ public class OrderDetailController {
         return orderDetailService.getOrderDetailsOfUser(authToken);
     }
 
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getAllOrderDetailsOfAdmin/{status}")
     public ApiResponse<List<OrderDetail>> getAllOrderDetailsOfAdmin(@PathVariable String status) {
         System.out.println(status);

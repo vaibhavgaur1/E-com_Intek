@@ -44,8 +44,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         productQuantityList.forEach(orderProductQuantity -> {
 
-            Product dbProduct = productDao.
-                    findById(orderProductQuantity.getProductId()).get();
+            Product dbProduct;
+            try {
+                dbProduct = productDao.
+                        findById(orderProductQuantity.getProductId()).orElseThrow(()-> new Exception("no product found"));
+            } catch (Exception e) {
+                throw new RuntimeException("no product found");
+            }
 
             OrderDetail orderDetail = OrderDetail.builder()
                     .orderFullName(orderInput.getFullName())

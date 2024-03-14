@@ -27,18 +27,20 @@ public class Product {
     private String productDescription;
     private Double productDiscountedPrice;
     private Double productActualPrice;
+    @Lob
+    private byte[] image;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "product_images",
-            joinColumns = {
-                    @JoinColumn(name = "product_id")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "image_id")
-            }
-    )
-    private Set<ImageModel> productImages;
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinTable(
+//            name = "product_images",
+//            joinColumns = {
+//                    @JoinColumn(name = "product_id")
+//            },
+//            inverseJoinColumns = {
+//                    @JoinColumn(name = "image_id")
+//            }
+//    )
+//    private Set<ImageModel> productImages;
 
     @ManyToOne
     @JsonManagedReference
@@ -51,7 +53,7 @@ public class Product {
                 .productDescription(productDescription)
                 .productDiscountedPrice(productDiscountedPrice)
                 .productActualPrice(productActualPrice)
-                .productImages(productImages)
+                .image(image)
                 .categoryId(category.getId())
                 .build();
     }

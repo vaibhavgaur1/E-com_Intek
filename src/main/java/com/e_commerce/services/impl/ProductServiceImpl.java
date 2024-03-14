@@ -57,8 +57,9 @@ public class ProductServiceImpl implements ProductService {
         productDao.deleteById(productId);
     }
 
+    @SneakyThrows
     public ApiResponse<Product> getProductById(Integer productId) {
-        return ResponseUtils.createSuccessResponse(productDao.findById(productId).get(), new TypeReference<Product>() {});
+        return ResponseUtils.createSuccessResponse(productDao.findById(productId).orElseThrow(()-> new Exception("Product Not Found")), new TypeReference<Product>() {});
     }
 
     public ApiResponse<List<Product>> getProductDetails(Boolean isSingleProductCheckout, Integer productId, String authHeader) throws Exception {
@@ -67,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
             //we are going to buy a single product
 
             List<Product> productList= new ArrayList<>();
-            Product product = productDao.findById(productId).get();
+            Product product = productDao.findById(productId).orElseThrow(()-> new Exception("Product Not Found"));
             productList.add(product);
             return ResponseUtils.createSuccessResponse(productList, new TypeReference<List<Product>>() {});
 
@@ -94,7 +95,8 @@ public class ProductServiceImpl implements ProductService {
                 .productDescription(productDto.getProductDescription())
                 .productDiscountedPrice(productDto.getProductDiscountedPrice())
                 .productActualPrice(productDto.getProductActualPrice())
-                .productImages(productDto.getProductImages())
+                .image(productDto.getImage())
+//                .productImages(productDto.getProductImages())
                 .category(category)
                 .build();
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class ProductController {
             @RequestPart("product") Product product,
             @RequestPart("imageFiles")MultipartFile[] files) throws Exception {
         try{
-            product.setProductImages(multiPartToImageModel(files));
+            product.setImage(multiPartToImageModel(files).get(0).getImageBytes());
             return ResponseEntity.ok(productService.saveProduct(product));
         }catch (IOException e){
             e.printStackTrace();
@@ -40,9 +41,9 @@ public class ProductController {
         }
     }
 
-    public Set<ImageModel> multiPartToImageModel(MultipartFile[] files) throws IOException {
+    public List<ImageModel> multiPartToImageModel(MultipartFile[] files) throws IOException {
 
-        Set<ImageModel> imageModels= new HashSet<>();
+        List<ImageModel> imageModels= new ArrayList<>();
         for(MultipartFile file: files){
             imageModels.add(ImageModel.builder()
                     .name(file.getOriginalFilename())
@@ -93,7 +94,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse<ProductDto>> addProduct(
             @RequestPart("productDto") ProductDto productDto,
             @RequestPart("imageFiles")MultipartFile[] files) throws IOException {
-        productDto.setProductImages(multiPartToImageModel(files));
+//        productDto.ProductImages(multiPartToImageModel(files));
+        productDto.setImage(multiPartToImageModel(files).get(0).getImageBytes());
         return ResponseEntity.ok(productService.addProduct(productDto));
     }
 }

@@ -32,7 +32,7 @@ public class CartController {
 
 
     @GetMapping("/getCartDetailsOfUser")
-//    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     public ApiResponse<List<Cart>> getCartDetailsOfUser(@RequestHeader("Authorization") String authHeader) throws Exception {
         return cartService.getCartDetailsOfUser(authHeader);
     }
