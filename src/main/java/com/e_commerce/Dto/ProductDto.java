@@ -26,7 +26,7 @@ public class ProductDto {
     private String productDescription;
     private Double productDiscountedPrice;
     private Double productActualPrice;
-    private Set<ImageModel> productImages;
 
     private Long categoryId;
+    private String uploadId;
 }

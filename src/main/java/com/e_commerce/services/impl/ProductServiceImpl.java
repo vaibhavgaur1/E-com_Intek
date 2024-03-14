@@ -94,7 +94,7 @@ public class ProductServiceImpl implements ProductService {
                 .productDescription(productDto.getProductDescription())
                 .productDiscountedPrice(productDto.getProductDiscountedPrice())
                 .productActualPrice(productDto.getProductActualPrice())
-                .productImages(productDto.getProductImages())
+                .uploadId(productDto.getUploadId())
                 .category(category)
                 .build();
 

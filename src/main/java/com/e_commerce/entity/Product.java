@@ -27,7 +27,7 @@ public class Product {
     private String productDescription;
     private Double productDiscountedPrice;
     private Double productActualPrice;
-
+    private String uploadId;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "product_images",
@@ -51,7 +51,8 @@ public class Product {
                 .productDescription(productDescription)
                 .productDiscountedPrice(productDiscountedPrice)
                 .productActualPrice(productActualPrice)
-                .productImages(productImages)
+//                .productImages(productImages)
+                .uploadId(getUploadId())
                 .categoryId(category.getId())
                 .build();
     }

@@ -89,11 +89,9 @@ public class ProductController {
 
 
 //    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping(value = "/add-product", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/add-product")
     public ResponseEntity<ApiResponse<ProductDto>> addProduct(
-            @RequestPart("productDto") ProductDto productDto,
-            @RequestPart("imageFiles")MultipartFile[] files) throws IOException {
-        productDto.setProductImages(multiPartToImageModel(files));
+            @RequestPart("productDto") ProductDto productDto) throws IOException {
         return ResponseEntity.ok(productService.addProduct(productDto));
     }
 }
