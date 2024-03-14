@@ -10,11 +10,14 @@ import com.e_commerce.entity.Cart;
 import com.e_commerce.entity.Category;
 import com.e_commerce.entity.Product;
 import com.e_commerce.entity.User;
+import com.e_commerce.request.AddProductRequest;
+import com.e_commerce.response.AddProductResponse;
 import com.e_commerce.response.ApiResponse;
 import com.e_commerce.services.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,8 +32,8 @@ public class ProductServiceImpl implements ProductService {
     private final HelperUtils helperUtils;
     private final CartDao cartDao;
     private final CategoryRepository categoryRepository;
-
-
+    @Autowired
+    private ProductDao product;
     public ApiResponse<Product> saveProduct(Product product) {
 
         return ResponseUtils.createSuccessResponse(productDao.save(product), new TypeReference<Product>() {});
@@ -81,8 +84,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @SneakyThrows
-    public ApiResponse<ProductDto> addProduct(ProductDto productDto) {
-
+    public ApiResponse<AddProductResponse> addProduct(AddProductRequest productDto) {
+        AddProductResponse responce= new AddProductResponse();
         if(productDto.getCategoryId()== null){
             throw new Exception("please ensure valid category");
         }
@@ -97,7 +100,10 @@ public class ProductServiceImpl implements ProductService {
                 .uploadId(productDto.getUploadId())
                 .category(category)
                 .build();
+                product.save(productToSave);
+            responce.setMessage("Success");
+        return ResponseUtils.createSuccessResponse(responce, new TypeReference<AddProductResponse>() {
+        });
 
-        return ResponseUtils.createSuccessResponse(productDao.save(productToSave).getDto(), new TypeReference<ProductDto>() {});
     }
 }

@@ -1,12 +1,13 @@
 package com.e_commerce.controller;
 
-import com.e_commerce.Dto.ProductDto;
 import com.e_commerce.entity.ImageModel;
 import com.e_commerce.entity.Product;
+import com.e_commerce.request.AddProductRequest;
 import com.e_commerce.response.ApiResponse;
+import com.e_commerce.response.AddProductResponse;
 import com.e_commerce.services.ProductService;
-import com.e_commerce.services.impl.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -88,10 +89,14 @@ public class ProductController {
     }
 
 
-//    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping(value = "/add-product")
-    public ResponseEntity<ApiResponse<ProductDto>> addProduct(
-            @RequestPart("productDto") ProductDto productDto) throws IOException {
-        return ResponseEntity.ok(productService.addProduct(productDto));
+////    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PostMapping("/add-product")
+//    public ResponseEntity<ApiResponse<ProductDto>> addProduct(@RequestPart ProductDto productDto) throws IOException {
+//        return ResponseEntity.ok(productService.addProduct(productDto));
+//    }
+@PostMapping("/addProduct")
+public ResponseEntity<ApiResponse<AddProductResponse>> getOldCdaDataForRebase(@RequestBody AddProductRequest req) {
+    return new ResponseEntity<>(productService.addProduct(req), HttpStatus.OK);
     }
+
 }
