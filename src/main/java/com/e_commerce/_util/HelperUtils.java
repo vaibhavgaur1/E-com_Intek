@@ -31,4 +31,11 @@ public class HelperUtils {
         }
         return user;
     }
+    public static String LASTFOLDERPATH = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/images";
+     public static String FILEPATH = "/images/";
+
+
+    public static String getDocumentId() {
+        return "BM_DOC" + ConverterUtils.getRandomTimeStamp();
+    }
 }

@@ -1,12 +1,13 @@
 package com.e_commerce.controller;
 
-import com.e_commerce.Dto.ProductDto;
 import com.e_commerce.entity.ImageModel;
 import com.e_commerce.entity.Product;
+import com.e_commerce.request.AddProductRequest;
 import com.e_commerce.response.ApiResponse;
+import com.e_commerce.response.AddProductResponse;
 import com.e_commerce.services.ProductService;
-import com.e_commerce.services.impl.ProductServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,18 +29,18 @@ public class ProductController {
     private final ProductService productService;
 
 //    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponse<Product>> saveProduct(
-            @RequestPart("product") Product product,
-            @RequestPart("imageFiles")MultipartFile[] files) throws Exception {
-        try{
-            product.setImage(multiPartToImageModel(files).get(0).getImageBytes());
-            return ResponseEntity.ok(productService.saveProduct(product));
-        }catch (IOException e){
-            e.printStackTrace();
-            throw new Exception("can not convert the files...");
-        }
-    }
+//    @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+//    public ResponseEntity<ApiResponse<Product>> saveProduct(
+//            @RequestPart("product") Product product,
+//            @RequestPart("imageFiles")MultipartFile[] files) throws Exception {
+//        try{
+//            product.setImage(multiPartToImageModel(files).get(0).getImageBytes());
+//            return ResponseEntity.ok(productService.saveProduct(product));
+//        }catch (IOException e){
+//            e.printStackTrace();
+//            throw new Exception("can not convert the files...");
+//        }
+//    }
 
     public List<ImageModel> multiPartToImageModel(MultipartFile[] files) throws IOException {
 
@@ -89,13 +90,26 @@ public class ProductController {
     }
 
 
+
 //    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping(value = "/add-product", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ApiResponse<ProductDto>> addProduct(
-            @RequestPart("productDto") ProductDto productDto,
-            @RequestPart("imageFiles")MultipartFile[] files) throws IOException {
-//        productDto.ProductImages(multiPartToImageModel(files));
-        productDto.setImage(multiPartToImageModel(files).get(0).getImageBytes());
-        return ResponseEntity.ok(productService.addProduct(productDto));
+//    @PostMapping(value = "/add-product", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+//    public ResponseEntity<ApiResponse<ProductDto>> addProduct(
+//            @RequestPart("productDto") ProductDto productDto,
+//            @RequestPart("imageFiles")MultipartFile[] files) throws IOException {
+////        productDto.ProductImages(multiPartToImageModel(files));
+//        productDto.setImage(multiPartToImageModel(files).get(0).getImageBytes());
+//        return ResponseEntity.ok(productService.addProduct(productDto));
+//    }
+
+////    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PostMapping("/add-product")
+//    public ResponseEntity<ApiResponse<ProductDto>> addProduct(@RequestPart ProductDto productDto) throws IOException {
+//        return ResponseEntity.ok(productService.addProduct(productDto));
+//    }
+@PostMapping("/addProduct")
+public ResponseEntity<ApiResponse<AddProductResponse>> getOldCdaDataForRebase(@RequestBody AddProductRequest req) {
+    return new ResponseEntity<>(productService.addProduct(req), HttpStatus.OK);
+
     }
+
 }

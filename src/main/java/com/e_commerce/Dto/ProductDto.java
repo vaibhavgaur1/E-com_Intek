@@ -3,11 +3,10 @@ package com.e_commerce.Dto;
 import com.e_commerce.entity.Category;
 import com.e_commerce.entity.ImageModel;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 
@@ -16,17 +15,20 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 public class ProductDto {
-
+    @Id
+    @GeneratedValue(strategy =GenerationType.AUTO)
     private Integer productId;
+
     private String productName;
     private String productDescription;
     private Double productDiscountedPrice;
     private Double productActualPrice;
-    private Set<ImageModel> productImages;
-    private byte[] image;
-
-
+//    private Set<ImageModel> productImages;
+//    private byte[] image;
 
     private Long categoryId;
+    private String uploadId;
 }
