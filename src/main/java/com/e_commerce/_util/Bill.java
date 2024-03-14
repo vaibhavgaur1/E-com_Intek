@@ -31,7 +31,7 @@ public class Bill {
 
 //    public class BillGenerator {
 
-        public static byte[] generateBillByteArray(@RequestParam String name) {
+        public static byte[] generateBillByteArray() {
 
             // Prepare output stream for the generated PDF
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

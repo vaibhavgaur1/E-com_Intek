@@ -24,7 +24,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.addCategory(categoryDto));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     @PatchMapping("/add-category")
     public ResponseEntity<ApiResponse<CategoryDto>> updateCategory(@RequestBody CategoryDto categoryDto){
         return ResponseEntity.ok(categoryService.updateCategory(categoryDto));

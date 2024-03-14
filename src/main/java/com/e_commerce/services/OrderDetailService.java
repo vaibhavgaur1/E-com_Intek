@@ -5,6 +5,7 @@ import com.e_commerce.request.OrderInput;
 import com.e_commerce.response.ApiResponse;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderDetailService {
 
@@ -19,4 +20,6 @@ public interface OrderDetailService {
     void markOrderAsDelivered(Integer orderId) throws Exception;
 
     void markOrderAsNotDelivered(Integer orderId) throws Exception;
+
+    Map<String, Object> getPdf();
 }
