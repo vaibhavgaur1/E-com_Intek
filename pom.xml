@@ -16,7 +16,11 @@
 	<description>Project for e-commerce in Spring boot</description>
 	<properties>
 		<java.version>17</java.version>
+
 	</properties>
+
+
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -178,6 +182,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>${project.name}-testing</finalName>
 	</build>
 
 </project>

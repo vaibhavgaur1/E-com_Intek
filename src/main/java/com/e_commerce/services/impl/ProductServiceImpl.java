@@ -15,6 +15,7 @@ import com.e_commerce.entity.User;
 import com.e_commerce.request.AddProductRequest;
 import com.e_commerce.response.AddProductResponse;
 import com.e_commerce.response.ApiResponse;
+import com.e_commerce.services.FetchImage;
 import com.e_commerce.services.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
                     throw new RuntimeException(e);
                 }
 
-                byte[] file = getFile(dbFileUploadForProduct.getPathURL());
+                byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
                 dbProduct.setImage(file);
 
 //                withImage.add(dbProduct);
@@ -86,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
                     throw new RuntimeException(e);
                 }
 
-                byte[] file = getFile(dbFileUploadForProduct.getPathURL());
+                byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
                 dbProduct.setImage(file);
 
 //                withImage.add(dbProduct);
@@ -110,7 +111,7 @@ public class ProductServiceImpl implements ProductService {
         FileUpload dbFileUploadForProduct = fileUploadRepository.findById(dbProduct.getUploadId())
                 .orElseThrow(()->new Exception("no image url found"));
 
-        byte[] file = getFile(dbFileUploadForProduct.getPathURL());
+        byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
         dbProduct.setImage(file);
 
         return ResponseUtils.createSuccessResponse(dbProduct, new TypeReference<Product>() {});
@@ -164,25 +165,5 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
-    @SneakyThrows
-    private byte[] getFile(String fullFilePath){
-        System.out.println("fullFilePath: "+fullFilePath);
-        System.out.println("HelperUtils.LASTFOLDERPATH+fullFilePath: "+HelperUtils.LASTFOLDERPATH+fullFilePath);
-        InputStream inputStream = null;
-        try {
-            File file = new File(HelperUtils.LASTFOLDERPATH + "/"+ fullFilePath);
-            inputStream = new FileInputStream(file);
 
-            return inputStream.readAllBytes();
-        }
-        finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }

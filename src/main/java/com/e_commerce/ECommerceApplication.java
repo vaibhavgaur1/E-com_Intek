@@ -1,5 +1,6 @@
 package com.e_commerce;
 
+import com.e_commerce.services.UserService;
 import com.e_commerce.services.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
+
 @RequiredArgsConstructor
 @Configuration @EnableAutoConfiguration  @ComponentScan
 @ComponentScan(basePackages = {"com.e-commerce"})
 public class ECommerceApplication implements CommandLineRunner {
 
 	@Autowired
-	public UserServiceImpl userService;
+	public UserService userService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ECommerceApplication.class, args);
