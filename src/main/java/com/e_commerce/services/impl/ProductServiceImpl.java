@@ -65,6 +65,7 @@ public class ProductServiceImpl implements ProductService {
 
                 byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
                 dbProduct.setImage(file);
+                dbProduct.setImageUrl(HelperUtils.LASTFOLDERPATH+dbFileUploadForProduct.getPathURL());
 
 //                withImage.add(dbProduct);
 

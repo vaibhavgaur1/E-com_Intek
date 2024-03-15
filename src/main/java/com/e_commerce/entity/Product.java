@@ -28,6 +28,7 @@ public class Product {
     private String productDescription;
     private Double productDiscountedPrice;
     private Double productActualPrice;
+    private String imageUrl;
 //
 //    @Column(unique = true)
 //    private String uploadDocId;
