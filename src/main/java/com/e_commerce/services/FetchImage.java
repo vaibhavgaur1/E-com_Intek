@@ -15,9 +15,25 @@ public class FetchImage {
         System.out.println("fullFilePath: "+fullFilePath);
         System.out.println("HelperUtils.LASTFOLDERPATH+fullFilePath: "+ HelperUtils.LASTFOLDERPATH+fullFilePath);
         InputStream inputStream = null;
+
+        String currentDirectory = System.getProperty("user.dir");
+        File currentDir = new File(currentDirectory);
+
+        // Get the parent directory
+        File parentDir = currentDir.getParentFile();
+        String parentPath =null;
+        if (parentDir != null) {
+            // Get the absolute path of the parent directory
+            parentPath = parentDir.getAbsolutePath();
+            parentPath= parentPath+ "/images/";
+            System.out.println("Parent directory: " + parentPath);
+        }
+        System.out.println(currentDirectory);
         try {
-            File file = new File(HelperUtils.LASTFOLDERPATH + "/"+ fullFilePath);
+            File file = new File(parentPath+ fullFilePath);
+//            File file = new File(HelperUtils.LASTFOLDERPATH + "/"+ fullFilePath);
             inputStream = new FileInputStream(file);
+
 
             return inputStream.readAllBytes();
         }

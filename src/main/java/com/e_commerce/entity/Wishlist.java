@@ -1,3 +1,4 @@
+
 package com.e_commerce.entity;
 
 import jakarta.persistence.*;
@@ -12,17 +13,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cart {
+public class Wishlist {
 
     @Id
     @GeneratedValue
-    private Integer cartId;
+    private Integer WishlistId;
     @ManyToOne(cascade = CascadeType.DETACH)
     private Product product;
-
-    private Long productQuantity;
-
     @ManyToOne(cascade = CascadeType.DETACH)
     private User user;
-
 }

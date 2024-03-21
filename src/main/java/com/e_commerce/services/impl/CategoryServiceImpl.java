@@ -34,8 +34,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .name(categoryDto.getName())
                 .description(categoryDto.getDescription())
                 .build();
+
+        CategoryDto categoryDto1 = categoryRepository.save(category).getDto();
+        categoryDto1.setTotalProducts(productDao.countByColumnName(category.getId()));
         try{
-            return ResponseUtils.createSuccessResponse(categoryRepository.save(category).getDto(), new TypeReference<CategoryDto>() {});
+            return ResponseUtils.createSuccessResponse(categoryDto1, new TypeReference<CategoryDto>() {});
         }catch (Exception e){
             throw new Exception("something went wrong");
         }

@@ -23,7 +23,7 @@ public class OrderDetailController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/placeOrder/{isSingleProductCheckout}")
-    public ApiResponse<List<OrderDetail>> placeOrder(
+    public ApiResponse<OrderDetail> placeOrder(
             @PathVariable Boolean isSingleProductCheckout,
             @RequestBody OrderInput orderInput,
             @RequestHeader("Authorization") String authToken) throws Exception {
@@ -35,8 +35,8 @@ public class OrderDetailController {
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/getOrderDetailsOfUser")
     public ApiResponse<List<OrderDetail>> getOrderDetailsOfUser(
-            @RequestHeader("Authorization") String authToken) throws Exception
-    {
+            @RequestHeader("Authorization") String authToken
+    ) throws Exception {
         return orderDetailService.getOrderDetailsOfUser(authToken);
     }
 

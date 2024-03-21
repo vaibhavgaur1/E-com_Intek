@@ -2,6 +2,7 @@ package com.e_commerce.entity;
 
 import com.e_commerce.Dto.CategoryDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +29,7 @@ public class Category {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     @JsonBackReference
+    @JsonIgnore
     private List<Product> products;
 
     public CategoryDto getDto() {

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface OrderDetailService {
 
-    ApiResponse<List<OrderDetail>> placeOrder(OrderInput orderInput,
+    ApiResponse<OrderDetail> placeOrder(OrderInput orderInput,
                                               String authToken,
                                               Boolean isSingleProductCheckout) throws Exception;
 

@@ -32,7 +32,13 @@ public class HelperUtils {
         return user;
     }
     public static String LASTFOLDERPATH = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/images";
+//    public static String LASTFOLDERPATH =System.getProperty("user.dir");
+
      public static String FILEPATH = "/";
+
+    public static String generateOrderId() {
+        return "order_" + ConverterUtils.getRandomTimeStamp();
+    }
 
 
     public static String getDocumentId() {

@@ -30,10 +30,10 @@ public class SecurityConfiguration {
     private final UserDetailService userDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
     private static final String[] WHITE_LIST_URL = {
-            "/loginAuth/authenticate", "/loginAuth/registerNewUser"
-            , "/loginAuth/product/getAllProducts",
+            "/loginAuth/**", "/loginAuth/registerNewUser"
+            , "/product/getAllProducts",
 //            "/product/deleteProductDetails/{productId}",
-            "/loginAuth/product/getProductById/{productId}","/loginAuth/otpVerify",
+            "/product/getProductById/{productId}","/loginAuth/otpVerify",
             "/loginAuth/generate-otp"
     },
     ADMIN_URL={

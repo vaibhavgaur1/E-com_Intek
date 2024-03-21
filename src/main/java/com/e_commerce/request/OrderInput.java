@@ -16,5 +16,8 @@ public class OrderInput {
     private String fullAddress;
     private String contactNumber;
     private String alternateContactNumber;
+    private String selectedStore;
+    private Double totalAmount;
+
     private List<OrderProductQuantity>  orderProductQuantityList;
 }

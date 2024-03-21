@@ -8,4 +8,6 @@ public class OrderProductQuantity {
 
     private Integer productId;
     private Integer quantity;
+    private Double totalProductAmount;
+
 }

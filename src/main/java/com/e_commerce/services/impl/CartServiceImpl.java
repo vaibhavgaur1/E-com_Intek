@@ -44,6 +44,7 @@ public class CartServiceImpl implements CartService {
             Cart cart = Cart.builder()
                     .user(dbUser)
                     .product(dbProduct)
+                    .productQuantity(1l)
                     .build();
             Cart savedCart = cartDao.save(cart);
 
