@@ -34,7 +34,10 @@ public class SecurityConfiguration {
             , "/product/getAllProducts",
 //            "/product/deleteProductDetails/{productId}",
             "/product/getProductById/{productId}","/loginAuth/otpVerify",
-            "/loginAuth/generate-otp"
+            "/loginAuth/generate-otp",
+            // updated due to jwt error
+
+
     },
     ADMIN_URL={
             "/admin"

@@ -38,7 +38,7 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
         UplaodMainFormDocumentsResponse uplaodDocuments = new UplaodMainFormDocumentsResponse();
 
-        File mainFilePath = new File(HelperUtils.LASTFOLDERPATH);
+        File mainFilePath = new File(HelperUtils.getPathForImage());
 
         if (!mainFilePath.exists()) {
             mainFilePath.mkdirs();

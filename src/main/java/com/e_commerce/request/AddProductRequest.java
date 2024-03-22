@@ -12,7 +12,6 @@ public class AddProductRequest {
     private String productDescription;
     private Double productDiscountedPrice;
     private Double productActualPrice;
-
     private Long categoryId;
     private String uploadId;
 

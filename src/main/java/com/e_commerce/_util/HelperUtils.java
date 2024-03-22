@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -31,14 +32,32 @@ public class HelperUtils {
         }
         return user;
     }
-    public static String LASTFOLDERPATH = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/images";
-//    public static String LASTFOLDERPATH =System.getProperty("user.dir");
+//    public static String LASTFOLDERPATH = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/images";
+    public static String LASTFOLDERPATH =System.getProperty("user.dir");
 
      public static String FILEPATH = "/";
 
     public static String generateOrderId() {
         return "order_" + ConverterUtils.getRandomTimeStamp();
     }
+
+    public static String getPathForImage(){
+        File currentDir = new File(LASTFOLDERPATH);
+//        File currentDir = new File(currentDirectory);
+
+        // Get the parent directory
+        File parentDir = currentDir.getParentFile();
+        String parentPath =null;
+        if (parentDir != null) {
+            // Get the absolute path of the parent directory
+            parentPath = parentDir.getAbsolutePath();
+            parentPath= parentPath+ "/images/";
+            System.out.println("Parent directory: " + parentPath);
+        }
+        return parentPath;
+    }
+
+
 
 
     public static String getDocumentId() {

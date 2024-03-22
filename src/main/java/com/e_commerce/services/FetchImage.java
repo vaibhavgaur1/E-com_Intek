@@ -13,7 +13,7 @@ public class FetchImage {
     @SneakyThrows
     public byte[] getFile(String fullFilePath){
         System.out.println("fullFilePath: "+fullFilePath);
-        System.out.println("HelperUtils.LASTFOLDERPATH+fullFilePath: "+ HelperUtils.LASTFOLDERPATH+fullFilePath);
+        System.out.println("HelperUtils.LASTFOLDERPATH+fullFilePath: "+ HelperUtils.getPathForImage()+fullFilePath);
         InputStream inputStream = null;
 
         String currentDirectory = System.getProperty("user.dir");

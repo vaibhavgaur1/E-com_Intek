@@ -32,11 +32,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String header = request.getHeader("Authorization");
+        System.out.println(header+"my token.....>>>>>>>>>>>>>>>>>>>>>>>");
         final String cardType = request.getHeader("cardType");
         String jwtToken = null;
         String username = null;
         if (header != null && header.startsWith("Bearer ")) {
-            jwtToken = header.substring(7);
+            jwtToken = header.substring(7).trim();
+
 
             try {
                 username = jwtUtil.extractUsername(jwtToken);
