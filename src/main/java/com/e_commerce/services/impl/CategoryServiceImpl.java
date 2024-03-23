@@ -1,12 +1,16 @@
 package com.e_commerce.services.impl;
 
 import com.e_commerce.Dto.CategoryDto;
+import com.e_commerce.Dto.FileUpload;
 import com.e_commerce._util.ResponseUtils;
 import com.e_commerce.dao.CategoryRepository;
+import com.e_commerce.dao.FileUploadRepository;
 import com.e_commerce.dao.ProductDao;
 import com.e_commerce.entity.Category;
+import com.e_commerce.entity.Product;
 import com.e_commerce.response.ApiResponse;
 import com.e_commerce.services.CategoryService;
+import com.e_commerce.services.FetchImage;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -21,6 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final ProductDao productDao;
+    private final FileUploadRepository fileUploadRepository;
 
     @SneakyThrows
     @Override
@@ -50,6 +55,21 @@ public class CategoryServiceImpl implements CategoryService {
 
         List<Category> all = categoryRepository.findAll();
         List<CategoryDto> list = new ArrayList<>();
+
+        List<Category> withImage= new ArrayList<>();
+        all.forEach(category1-> {
+            FileUpload dbFileUploadForProduct = null;
+            try {
+                dbFileUploadForProduct = fileUploadRepository.findById(category1.getUploadId())
+                        .orElseThrow(() -> new Exception("no image url found"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
+            category1.setImage(file);
+        });
+
         all.forEach(category -> {
             list.add(
                     CategoryDto.builder()
@@ -57,10 +77,14 @@ public class CategoryServiceImpl implements CategoryService {
                             .name(category.getName())
                             .description(category.getDescription())
                             .totalProducts(productDao.countByColumnName(category.getId()))
+                            .image(category.getImage())
+                            .uploadId(category.getUploadId())
+                            .imageUrl(category.getImageUrl())
                             .build()
             );
-
         });
+
+
         return ResponseUtils.createSuccessResponse(list, new TypeReference<List<CategoryDto>>() {});
     }
 

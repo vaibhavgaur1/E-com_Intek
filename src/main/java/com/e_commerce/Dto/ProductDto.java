@@ -26,9 +26,10 @@ public class ProductDto {
     private String productDescription;
     private Double productDiscountedPrice;
     private Double productActualPrice;
+    private String uploadId;
 //    private Set<ImageModel> productImages;
 //    private byte[] image;
 
     private Long categoryId;
-    private String uploadId;
+
 }

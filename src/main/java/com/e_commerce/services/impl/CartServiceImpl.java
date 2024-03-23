@@ -25,7 +25,7 @@ public class CartServiceImpl implements CartService {
     private final CartDao cartDao;
     private final ProductDao productDao;
     private final HelperUtils helperUtils;
-    private final FileUploadRepository fileUploRepository;
+    private final FileUploadRepository fileUploadRepository;
     public ApiResponse<Cart> addToCart(Integer productId, String authHeader) throws Exception {
         Product dbProduct = productDao.findById(productId).orElseThrow(()-> new Exception("no product found"));
 
@@ -47,15 +47,31 @@ public class CartServiceImpl implements CartService {
                     .productQuantity(1l)
                     .build();
             Cart savedCart = cartDao.save(cart);
+            double totalAmount = calculateTotalAmount(dbListCartOfUser);
 
-            FileUpload dbFileUploadForProduct = fileUploRepository.findById(dbProduct.getUploadId())
+            FileUpload dbFileUploadForProduct = fileUploadRepository.findById(dbProduct.getUploadId())
                     .orElseThrow(()->new Exception("no image url found"));
 
             byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
             dbProduct.setImage(file);
             return ResponseUtils.createSuccessResponse(savedCart, new TypeReference<Cart>() {});
+//            return null;
         }
         return null;
+
+    }
+
+    private double calculateTotalAmount(List<Cart> dbListCartOfUser){
+
+        double totalAmount = 0.0;
+        for (Cart cartItem : dbListCartOfUser) {
+            Product product = cartItem.getProduct();
+            // Assuming each product has a price attribute
+            double productPrice = product.getProductDiscountedPrice();
+            long productQuantity = cartItem.getProductQuantity();
+            totalAmount += productPrice * productQuantity;
+        }
+        return totalAmount;
     }
 
     public ApiResponse<List<Cart>> getCartDetailsOfUser(String authHeader) throws Exception {
@@ -64,7 +80,7 @@ public class CartServiceImpl implements CartService {
         dbCartList.forEach(dbCart-> {
             FileUpload dbFileUploadForProduct = null;
             try {
-                dbFileUploadForProduct = fileUploRepository.findById(dbCart.getProduct().getUploadId())
+                dbFileUploadForProduct = fileUploadRepository.findById(dbCart.getProduct().getUploadId())
                     .orElseThrow(()->new Exception("no image url found"));
                 byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
                 dbCart.getProduct().setImage(file);

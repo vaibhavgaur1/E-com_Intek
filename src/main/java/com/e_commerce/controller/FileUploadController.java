@@ -28,7 +28,7 @@ public class FileUploadController {
 
 	@PostMapping(value = "/uploadFile")
 	public ResponseEntity<ApiResponse<UplaodMainFormDocumentsResponse>> uploadPhotoRegistrationApi(@FormDataParam("file") MultipartFile file) throws IOException {
-		return new ResponseEntity<>(uploadDocumentService.fileUplaod(file), HttpStatus.OK);
+		return new ResponseEntity<>(uploadDocumentService.fileUpload(file), HttpStatus.OK);
 	}
 
 //	@CrossOrigin(origins = "http://localhost:1111")

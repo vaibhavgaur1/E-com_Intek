@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.PosixFilePermissions;
 
 
 @Service
@@ -33,7 +34,7 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
     private FileUploadRepository fileUploadRepository;
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public ApiResponse<UplaodMainFormDocumentsResponse> fileUplaod(MultipartFile file) throws IOException {
+    public ApiResponse<UplaodMainFormDocumentsResponse> fileUpload(MultipartFile file) throws IOException {
 
 
         UplaodMainFormDocumentsResponse uplaodDocuments = new UplaodMainFormDocumentsResponse();
@@ -41,7 +42,12 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
         File mainFilePath = new File(HelperUtils.getPathForImage());
 
         if (!mainFilePath.exists()) {
+            System.out.println("path ban raha he-------------------------------------------------------------------");
             mainFilePath.mkdirs();
+            Path path= Paths.get(mainFilePath.getAbsolutePath());
+            Files.setPosixFilePermissions(path, PosixFilePermissions.fromString("rwxrwxrwx"));
+            System.out.println("path ban gaya he-------------------------------------------------------------------");
+
         }
         if (file == null || file.isEmpty()) {
             throw new SDDException(HttpStatus.BAD_REQUEST.value(), "DOCUMENT FILE CAN NOT BE BLANK.");
@@ -65,6 +71,10 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
         } catch (IOException e) {
             e.printStackTrace();
+
+            uplaodDocuments.setMessage("path nahi mila: "+path1.toAbsolutePath());
+            return ResponseUtils.createSuccessResponse(uplaodDocuments, new TypeReference<UplaodMainFormDocumentsResponse>() {
+            });
         }
 
         FileUpload fileUpload = new FileUpload();

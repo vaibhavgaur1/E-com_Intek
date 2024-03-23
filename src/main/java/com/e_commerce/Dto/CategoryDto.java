@@ -10,4 +10,7 @@ public class CategoryDto {
     private String name;
     private String description;
     private Long totalProducts;
+    private String uploadId;
+    private byte[] image;
+    private String imageUrl;
 }

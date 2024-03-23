@@ -27,6 +27,11 @@ public class Category {
     @Column(length = 500)
     private String description;
 
+    private String imageUrl;
+
+    private byte[] image;
+    private String uploadId;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     @JsonBackReference
     @JsonIgnore

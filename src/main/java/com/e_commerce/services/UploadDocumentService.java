@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public interface UploadDocumentService {
 
-	ApiResponse<UplaodMainFormDocumentsResponse> fileUplaod(MultipartFile file) throws IOException;;
+	ApiResponse<UplaodMainFormDocumentsResponse> fileUpload(MultipartFile file) throws IOException;;
 
 
 
