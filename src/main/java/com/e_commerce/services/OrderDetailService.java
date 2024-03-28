@@ -9,9 +9,9 @@ import java.util.Map;
 
 public interface OrderDetailService {
 
-    ApiResponse<OrderDetail> placeOrder(OrderInput orderInput,
-                                              String authToken,
-                                              Boolean isSingleProductCheckout) throws Exception;
+    ApiResponse<Map<String, Object>> placeOrder(OrderInput orderInput,
+                                                String authToken,
+                                                Boolean isSingleProductCheckout) throws Exception;
 
     ApiResponse<List<OrderDetail>> getOrderDetailsOfUser(String authToken) throws Exception;
 

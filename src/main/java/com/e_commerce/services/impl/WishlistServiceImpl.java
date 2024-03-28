@@ -29,6 +29,7 @@ public class WishlistServiceImpl implements WishlistService {
     private final ProductDao productDao;
     private final HelperUtils helperUtils;
     private final FileUploadRepository fileUploRepository;
+    private final FetchImage fetchImage;
     public ApiResponse<Wishlist> addToWishlist(Integer productId, String authHeader) throws Exception {
 
         System.out.println("productId: "+productId);
@@ -59,7 +60,7 @@ public class WishlistServiceImpl implements WishlistService {
             FileUpload dbFileUploadForProduct = fileUploRepository.findById(dbProduct.getUploadId())
                     .orElseThrow(()->new Exception("no image url found"));
 
-            byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
+            byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
             dbProduct.setImage(file);
             return ResponseUtils.createSuccessResponse(savedWishlist, new TypeReference<Wishlist>() {});
         }
@@ -74,7 +75,7 @@ public class WishlistServiceImpl implements WishlistService {
             try {
                 dbFileUploadForProduct = fileUploRepository.findById(dbWish.getProduct().getUploadId())
                         .orElseThrow(()->new Exception("no image url found"));
-                byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
+                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
                 dbWish.getProduct().setImage(file);
             } catch (Exception e) {
                 throw new RuntimeException("no image url found");
@@ -91,7 +92,7 @@ public class WishlistServiceImpl implements WishlistService {
             try {
                 dbFileUploadForProduct = fileUploRepository.findById(dbWish.getProduct().getUploadId())
                         .orElseThrow(()->new Exception("no image url found"));
-                byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
+                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
                 dbWish.getProduct().setImage(file);
             } catch (Exception e) {
                 throw new RuntimeException("no image url found");

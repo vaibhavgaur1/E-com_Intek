@@ -2,6 +2,7 @@ package com.e_commerce.entity;
 
 import com.e_commerce.Dto.FileUpload;
 import com.e_commerce.Dto.ProductDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -65,6 +66,7 @@ public class Product {
 
     @ManyToOne
     @JsonManagedReference
+    @JsonIgnore
     private Category category;
 
     public ProductDto getDto() {

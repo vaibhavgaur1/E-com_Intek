@@ -1,19 +1,24 @@
 package com.e_commerce.services;
 
 import com.e_commerce._util.HelperUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-@UtilityClass
+@Service
+@RequiredArgsConstructor
 public class FetchImage {
+
+    private final HelperUtils helperUtils;
     @SneakyThrows
     public byte[] getFile(String fullFilePath){
         System.out.println("fullFilePath: "+fullFilePath);
-        System.out.println("HelperUtils.LASTFOLDERPATH+fullFilePath: "+ HelperUtils.getPathForImage()+fullFilePath);
+        System.out.println("HelperUtils.LASTFOLDERPATH+fullFilePath: "+ helperUtils.getPathForImage()+fullFilePath);
         InputStream inputStream = null;
 
         String currentDirectory = System.getProperty("user.dir");

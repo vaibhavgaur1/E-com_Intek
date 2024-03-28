@@ -2,6 +2,7 @@ package com.e_commerce.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class OrderDetail {
     private User user;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "orderDetail")
-//    @BatchSize(size = 20)
+    @BatchSize(size = 40)
     private List<UserOrders> userOrders;
 
 }

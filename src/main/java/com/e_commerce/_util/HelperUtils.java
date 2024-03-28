@@ -3,10 +3,14 @@ package com.e_commerce._util;
 import com.e_commerce.dao.UserDao;
 import com.e_commerce.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -32,17 +36,20 @@ public class HelperUtils {
         }
         return user;
     }
-//    public static String LASTFOLDERPATH = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/images";
-    public static String LASTFOLDERPATH =System.getProperty("user.dir");
+    public static String LASTFOLDERPATH = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/images";
+//    public static String LASTFOLDERPATH =System.getProperty("user.dir");
 
      public static String FILEPATH = "/";
+    private final ResourceLoader resourceLoader;
 
     public static String generateOrderId() {
         return "order_" + ConverterUtils.getRandomTimeStamp();
     }
 
-    public static String getPathForImage(){
-        File currentDir = new File(LASTFOLDERPATH);
+    @SneakyThrows
+    public  String getPathForImage()  {
+        Resource resource = resourceLoader.getResource("classpath:static/images");
+        File currentDir = new File(resource.getURI());
 //        File currentDir = new File(currentDirectory);
 
         // Get the parent directory

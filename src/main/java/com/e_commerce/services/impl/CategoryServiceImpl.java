@@ -26,6 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final ProductDao productDao;
     private final FileUploadRepository fileUploadRepository;
+    private final FetchImage fetchImage;
 
     @SneakyThrows
     @Override
@@ -66,7 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
                 throw new RuntimeException(e);
             }
 
-            byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
+            byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
             category1.setImage(file);
         });
 

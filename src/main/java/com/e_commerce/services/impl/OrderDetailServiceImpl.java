@@ -9,12 +9,7 @@ import com.e_commerce.entity.*;
 import com.e_commerce.request.OrderInput;
 import com.e_commerce.response.ApiResponse;
 import com.e_commerce.services.OrderDetailService;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +36,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     private static final String ORDER_PLACED= "Placed";
 
-    public ApiResponse<OrderDetail> placeOrder(OrderInput orderInput, String authToken, Boolean isSingleProductCheckout) throws Exception {
+    public ApiResponse<Map<String, Object>> placeOrder(OrderInput orderInput, String authToken, Boolean isSingleProductCheckout) throws Exception {
         List<OrderProductQuantity> productQuantityList = orderInput.getOrderProductQuantityList();
         User dbUser = helperUtils.getUserFromAuthToken(authToken);
 //        List<OrderDetail> detailList= new ArrayList<>();
@@ -67,9 +62,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 .alternateContactNumber(orderInput.getAlternateContactNumber())
                 .orderStatus(ORDER_PLACED)
                 .totalOrderAmount(orderInput.getTotalAmount())
+                .user(dbUser)
                 .build();
 
         OrderDetail savedOrderDetail = orderDetailDao.save(orderDetail);
+        List<UserOrders> userOrdersList= new ArrayList<>();
 
         productQuantityList.forEach(orderProductQuantity -> {
 
@@ -87,9 +84,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                     .orderDetail(savedOrderDetail)
                     .build();
 
-            userOrderDao.save(userOrders);
-
-
+            UserOrders savedUserOrders = userOrderDao.save(userOrders);
+            userOrdersList.add(savedUserOrders);
 
 
 //            OrderDetail orderDetail = OrderDetail.builder()
@@ -115,13 +111,25 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
 //            detailList.add(orderDetailDao.save(orderDetail));
         });
-        return ResponseUtils.createSuccessResponse(orderDetail, new TypeReference<OrderDetail>() {});
+        orderDetail.setUserOrders(userOrdersList);
+
+        byte[] pdfBytes = billGenerator.generateBillByteArray(orderDetail);
+
+        Map<String, Object> map= new HashMap<>();
+        map.put("orderDetails", orderDetail);
+        map.put("pdfName", orderDetail.getOrderId());
+        map.put("pdfByte", pdfBytes);
+
+        return ResponseUtils.createSuccessResponse(map, new TypeReference<Map<String, Object>>() {});
     }
 
 
     public ApiResponse<List<OrderDetail>> getOrderDetailsOfUser(String authToken) throws Exception {
         User dbUser = helperUtils.getUserFromAuthToken(authToken);
         List<OrderDetail> byUser = orderDetailDao.findByUser(dbUser);
+
+//        userOrderDao.findByOrderDetailId();
+//        orderDetailDao
         return ResponseUtils.createSuccessResponse(byUser, new TypeReference<List<OrderDetail>>() {});
 
     }
@@ -151,11 +159,12 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
     public Map<String, Object> getPdf() {
 
+        OrderDetail orderDetail = orderDetailDao.findAll().get(0);
         Map<String, Object> response = new HashMap<>();
 
 
 
-        byte[] pdfBytes = billGenerator.generateBillByteArray();
+        byte[] pdfBytes = billGenerator.generateBillByteArray(orderDetail);
         response.put("pdfBytes", pdfBytes);
         response.put("message", "PDF generated");
         return response;

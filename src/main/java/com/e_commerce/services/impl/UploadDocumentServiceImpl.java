@@ -32,6 +32,7 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
     @Autowired
     private FileUploadRepository fileUploadRepository;
+    private HelperUtils helperUtils;
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public ApiResponse<UplaodMainFormDocumentsResponse> fileUpload(MultipartFile file) throws IOException {
@@ -39,7 +40,7 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
         UplaodMainFormDocumentsResponse uplaodDocuments = new UplaodMainFormDocumentsResponse();
 
-        File mainFilePath = new File(HelperUtils.getPathForImage());
+        File mainFilePath = new File(helperUtils.getPathForImage());
 
         if (!mainFilePath.exists()) {
             System.out.println("path ban raha he-------------------------------------------------------------------");

@@ -18,5 +18,6 @@ public class AddressDto {
     private String city;
     private String state;
     private String addressType;
+    private String pinCode;
     private int userId;
 }

@@ -22,6 +22,7 @@ public class Address {
     private String landMark;
     private String city;
     private String state;
+    private String pinCode;
     private String addressType;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
@@ -36,6 +37,7 @@ public class Address {
                 .landMark(landMark)
                 .city(city)
                 .state(state)
+                .pinCode(pinCode)
                 .addressType(addressType)
                 .userId(user.getId())
                 .build();

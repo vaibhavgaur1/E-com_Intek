@@ -4,7 +4,6 @@ import com.e_commerce.entity.OrderDetail;
 import com.e_commerce.request.OrderInput;
 import com.e_commerce.response.ApiResponse;
 import com.e_commerce.services.OrderDetailService;
-import com.e_commerce.services.impl.OrderDetailServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +22,7 @@ public class OrderDetailController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/placeOrder/{isSingleProductCheckout}")
-    public ApiResponse<OrderDetail> placeOrder(
+    public ApiResponse<Map<String, Object>> placeOrder(
             @PathVariable Boolean isSingleProductCheckout,
             @RequestBody OrderInput orderInput,
             @RequestHeader("Authorization") String authToken) throws Exception {
@@ -66,5 +65,14 @@ public class OrderDetailController {
         byte[] pdfBytes = (byte[])stringObjectMap.get("pdfBytes");
 
         response.getOutputStream().write(pdfBytes);
+
+
+//        String mimeType = URLConnection.guessContentTypeFromName(file.getName()); // for you it would be application/pdf
+//        if (mimeType == null) mimeType = "application/octet-stream";
+//        response.setContentType(mimeType);
+//        response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() + "\""));
+//        response.setContentLength((int) file.length());
+//        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+//        FileCopyUtils.copy(inputStream, response.getOutputStream());
     }
 }

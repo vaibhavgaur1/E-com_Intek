@@ -37,6 +37,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductDao productDao;
     private final HelperUtils helperUtils;
+    private final FetchImage fetchImage;
     private final CartDao cartDao;
     private final CategoryRepository categoryRepository;
     private final FileUploadRepository fileUploadRepository;
@@ -63,9 +64,9 @@ public class ProductServiceImpl implements ProductService {
                     throw new RuntimeException(e);
                 }
 
-                byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
+                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
                 dbProduct.setImage(file);
-                dbProduct.setImageUrl(HelperUtils.getPathForImage()+dbFileUploadForProduct.getPathURL());
+                dbProduct.setImageUrl(helperUtils.getPathForImage()+dbFileUploadForProduct.getPathURL());
 //                withImage.add(dbProduct);
             });
 
@@ -86,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
                     throw new RuntimeException(e);
                 }
 
-                byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
+                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
                 dbProduct.setImage(file);
 
 //                withImage.add(dbProduct);
@@ -110,7 +111,7 @@ public class ProductServiceImpl implements ProductService {
         FileUpload dbFileUploadForProduct = fileUploadRepository.findById(dbProduct.getUploadId())
                 .orElseThrow(()->new Exception("no image url found"));
 
-        byte[] file = FetchImage.getFile(dbFileUploadForProduct.getPathURL());
+        byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
         dbProduct.setImage(file);
 
         return ResponseUtils.createSuccessResponse(dbProduct, new TypeReference<Product>() {});
