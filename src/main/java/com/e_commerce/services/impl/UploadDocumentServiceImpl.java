@@ -45,8 +45,6 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
         if (!mainFilePath.exists()) {
             System.out.println("path ban raha he-------------------------------------------------------------------");
             mainFilePath.mkdirs();
-            Path path= Paths.get(mainFilePath.getAbsolutePath());
-            Files.setPosixFilePermissions(path, PosixFilePermissions.fromString("rwxrwxrwx"));
             System.out.println("path ban gaya he-------------------------------------------------------------------");
 
         }
@@ -80,7 +78,8 @@ public class UploadDocumentServiceImpl implements UploadDocumentService {
 
         FileUpload fileUpload = new FileUpload();
         fileUpload.setUploadID(HelperUtils.getDocumentId());
-        fileUpload.setPathURL(HelperUtils.FILEPATH + filename1 + fileExtension1);
+//        fileUpload.setPathURL(HelperUtils.FILEPATH + filename1 + fileExtension1);
+        fileUpload.setPathURL(filename1 + fileExtension1);
         fileUpload.setPathURL(filename1 + fileExtension1);
         fileUploadRepository.save(fileUpload);
 

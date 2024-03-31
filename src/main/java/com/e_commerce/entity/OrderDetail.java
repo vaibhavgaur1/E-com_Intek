@@ -31,5 +31,6 @@ public class OrderDetail {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "orderDetail")
     @BatchSize(size = 40)
     private List<UserOrders> userOrders;
+    private String pdfUrl;
 
 }

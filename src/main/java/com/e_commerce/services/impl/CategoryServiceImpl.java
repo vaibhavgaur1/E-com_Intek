@@ -57,19 +57,19 @@ public class CategoryServiceImpl implements CategoryService {
         List<Category> all = categoryRepository.findAll();
         List<CategoryDto> list = new ArrayList<>();
 
-        List<Category> withImage= new ArrayList<>();
-        all.forEach(category1-> {
-            FileUpload dbFileUploadForProduct = null;
-            try {
-                dbFileUploadForProduct = fileUploadRepository.findById(category1.getUploadId())
-                        .orElseThrow(() -> new Exception("no image url found"));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
-            category1.setImage(file);
-        });
+//        List<Category> withImage= new ArrayList<>();
+//        all.forEach(category1-> {
+//            FileUpload dbFileUploadForProduct = null;
+//            try {
+//                dbFileUploadForProduct = fileUploadRepository.findById(category1.getUploadId())
+//                        .orElseThrow(() -> new Exception("no image url found"));
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//            byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
+//            category1.setImage(file);
+//        });
 
         all.forEach(category -> {
             list.add(
@@ -78,9 +78,9 @@ public class CategoryServiceImpl implements CategoryService {
                             .name(category.getName())
                             .description(category.getDescription())
                             .totalProducts(productDao.countByColumnName(category.getId()))
-                            .image(category.getImage())
-                            .uploadId(category.getUploadId())
-                            .imageUrl(category.getImageUrl())
+//                            .image(category.getImage())
+//                            .uploadId(category.getUploadId())
+//                            .imageUrl(category.getImageUrl())
                             .build()
             );
         });

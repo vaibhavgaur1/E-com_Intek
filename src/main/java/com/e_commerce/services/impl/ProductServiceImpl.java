@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -43,16 +44,20 @@ public class ProductServiceImpl implements ProductService {
     private final FileUploadRepository fileUploadRepository;
     @Autowired
     private ProductDao product;
+    @SneakyThrows
     public ApiResponse<Product> saveProduct(Product product) {
 
         return ResponseUtils.createSuccessResponse(productDao.save(product), new TypeReference<Product>() {});
     }
 
-    public ApiResponse<List<Product>> getAllProducts(Integer pageNumber, Integer pageSize, String searchKey) {
-        Pageable pageable= PageRequest.of(pageNumber, pageSize);
+    public ApiResponse<List<Product>> getAllProducts()
+//    Integer pageNumber, Integer pageSize, String searchKey
+    {
+//        Pageable pageable= PageRequest.of(pageNumber, pageSize);
 
-        if(searchKey== null || searchKey.isEmpty() || searchKey.isBlank()){
-            List<Product> dbProducts =(List<Product>) productDao.findAll(pageable);
+//        if(searchKey== null || searchKey.isEmpty() || searchKey.isBlank())
+        {
+            List<Product> dbProducts =(List<Product>) productDao.findAll();    //pageable
             System.out.println(dbProducts.size());
             List<Product> withImage= new ArrayList<>();
             dbProducts.forEach(dbProduct->{
@@ -71,33 +76,35 @@ public class ProductServiceImpl implements ProductService {
             });
 
             return ResponseUtils.createSuccessResponse(dbProducts, new TypeReference<List<Product>>() {});
-        }else{
-            List<Product> dbProducts = productDao
-                    .findByProductNameContainingIgnoreCaseOrProductDescriptionContainingIgnoreCase(
-                            searchKey, searchKey, pageable
-                    );
-            System.out.println(dbProducts.size());
-            List<Product> withImage= new ArrayList<>();
-            dbProducts.forEach(dbProduct->{
-                FileUpload dbFileUploadForProduct = null;
-                try {
-                    dbFileUploadForProduct = fileUploadRepository.findById(dbProduct.getUploadId())
-                            .orElseThrow(()->new Exception("no image url found"));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
-                dbProduct.setImage(file);
-
-//                withImage.add(dbProduct);
-
-            });
-
-
-
-            return ResponseUtils.createSuccessResponse(dbProducts, new TypeReference<List<Product>>() {});
         }
+//        else{
+//            List<Product> dbProducts = productDao
+//                    .findByProductNameContainingIgnoreCaseOrProductDescriptionContainingIgnoreCase
+//                            (
+//                            searchKey, searchKey, pageable
+//                    );
+//            System.out.println(dbProducts.size());
+//            List<Product> withImage= new ArrayList<>();
+//            dbProducts.forEach(dbProduct->{
+//                FileUpload dbFileUploadForProduct = null;
+//                try {
+//                    dbFileUploadForProduct = fileUploadRepository.findById(dbProduct.getUploadId())
+//                            .orElseThrow(()->new Exception("no image url found"));
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
+//                dbProduct.setImage(file);
+//
+////                withImage.add(dbProduct);
+//
+//            });
+//
+//
+//
+//            return ResponseUtils.createSuccessResponse(dbProducts, new TypeReference<List<Product>>() {});
+//        }
     }
 
     public void deleteProductDetails(Integer productId) {
@@ -113,6 +120,8 @@ public class ProductServiceImpl implements ProductService {
 
         byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
         dbProduct.setImage(file);
+
+        dbProduct.setImageUrl(helperUtils.getPathForImage()+dbFileUploadForProduct.getPathURL());
 
         return ResponseUtils.createSuccessResponse(dbProduct, new TypeReference<Product>() {});
     }

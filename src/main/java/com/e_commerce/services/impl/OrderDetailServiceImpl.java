@@ -36,7 +36,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     private static final String ORDER_PLACED= "Placed";
 
-    public ApiResponse<Map<String, Object>> placeOrder(OrderInput orderInput, String authToken, Boolean isSingleProductCheckout) throws Exception {
+    public ApiResponse<OrderDetail> placeOrder(OrderInput orderInput, String authToken, Boolean isSingleProductCheckout) throws Exception {
         List<OrderProductQuantity> productQuantityList = orderInput.getOrderProductQuantityList();
         User dbUser = helperUtils.getUserFromAuthToken(authToken);
 //        List<OrderDetail> detailList= new ArrayList<>();
@@ -53,6 +53,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             throw new Exception("product not found");
         }
 
+        double totalProductAmount= 0.0, totalAmount= 0.0;
+
+        for (OrderProductQuantity orderProductQuantity : productQuantityList) {
+            Product product = productDao.findById(orderProductQuantity.getProductId()).get();
+            totalProductAmount= orderProductQuantity.getQuantity() * product.getProductDiscountedPrice();
+
+        }
         OrderDetail orderDetail = OrderDetail.builder()
                 .orderId(HelperUtils.generateOrderId())
                 .orderByName(orderInput.getFullName())
@@ -88,6 +95,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             userOrdersList.add(savedUserOrders);
 
 
+
+
+
 //            OrderDetail orderDetail = OrderDetail.builder()
 //                    .orderId(HelperUtils.generateOrderId())
 //                    .orderByName(orderInput.getFullName())
@@ -111,16 +121,20 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
 //            detailList.add(orderDetailDao.save(orderDetail));
         });
+        savedOrderDetail.setUserOrders(userOrdersList);
+        String pathForPdf = billGenerator.generateBillByteArray(savedOrderDetail);
+        orderDetailDao.setPdfUrl(savedOrderDetail.getId(), pathForPdf);
+
         orderDetail.setUserOrders(userOrdersList);
 
-        byte[] pdfBytes = billGenerator.generateBillByteArray(orderDetail);
+//        byte[] pdfBytes = billGenerator.generateBillByteArray(orderDetail);
+//
+//        Map<String, Object> map= new HashMap<>();
+//        map.put("orderDetails", orderDetail);
+//        map.put("pdfName", orderDetail.getOrderId());
+//        map.put("pdfByte", pdfBytes);
 
-        Map<String, Object> map= new HashMap<>();
-        map.put("orderDetails", orderDetail);
-        map.put("pdfName", orderDetail.getOrderId());
-        map.put("pdfByte", pdfBytes);
-
-        return ResponseUtils.createSuccessResponse(map, new TypeReference<Map<String, Object>>() {});
+        return ResponseUtils.createSuccessResponse(orderDetail, new TypeReference<OrderDetail>() {});
     }
 
 
@@ -157,16 +171,18 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         dbOrderDetail.setOrderStatus("NOT_DELIVERED");
         orderDetailDao.save(dbOrderDetail);
     }
-    public Map<String, Object> getPdf() {
+    public ApiResponse<List<Object>> getPdf() {
 
         OrderDetail orderDetail = orderDetailDao.findAll().get(0);
         Map<String, Object> response = new HashMap<>();
 
 
 
-        byte[] pdfBytes = billGenerator.generateBillByteArray(orderDetail);
+      String pdfBytes = billGenerator.generateBillByteArray(orderDetail);
         response.put("pdfBytes", pdfBytes);
-        response.put("message", "PDF generated");
-        return response;
+        response.put("PdfName", "PdfGenerated");
+        return ApiResponse.<List<Object>>builder()
+                .response(List.of(pdfBytes, "pdfName"))
+                .build();
     }
 }

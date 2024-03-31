@@ -59,12 +59,13 @@ public class ProductController {
 
     //    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getAllProducts")
-    public ApiResponse<List<Product>> getAllProducts(@RequestParam(defaultValue = "0")Integer pageNumber,
-                                                     @RequestParam(defaultValue = "6")Integer pageSize,
-                                                     @RequestParam(defaultValue = "")String searchKey
+    public ApiResponse<List<Product>> getAllProducts(
+//                                                     @RequestParam(defaultValue = "0")Integer pageNumber,
+//                                                     @RequestParam(defaultValue = "6")Integer pageSize,
+//                                                     @RequestParam(defaultValue = "")String searchKey
     ){
-        System.out.println(searchKey);
-        return productService.getAllProducts(pageNumber, pageSize, searchKey);
+//        System.out.println(searchKey);
+        return productService.getAllProducts();   //pageNumber, pageSize, searchKey
     }
 
     //    @PreAuthorize("hasAuthority('ADMIN')")

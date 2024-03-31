@@ -5,13 +5,12 @@ import com.e_commerce.request.OrderInput;
 import com.e_commerce.response.ApiResponse;
 
 import java.util.List;
-import java.util.Map;
 
 public interface OrderDetailService {
 
-    ApiResponse<Map<String, Object>> placeOrder(OrderInput orderInput,
-                                                String authToken,
-                                                Boolean isSingleProductCheckout) throws Exception;
+    ApiResponse<OrderDetail> placeOrder(OrderInput orderInput,
+                                        String authToken,
+                                        Boolean isSingleProductCheckout) throws Exception;
 
     ApiResponse<List<OrderDetail>> getOrderDetailsOfUser(String authToken) throws Exception;
 
@@ -21,5 +20,5 @@ public interface OrderDetailService {
 
     void markOrderAsNotDelivered(Integer orderId) throws Exception;
 
-    Map<String, Object> getPdf();
+    ApiResponse<List<Object>> getPdf();
 }

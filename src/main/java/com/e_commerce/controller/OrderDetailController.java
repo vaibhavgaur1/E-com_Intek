@@ -22,7 +22,7 @@ public class OrderDetailController {
 
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/placeOrder/{isSingleProductCheckout}")
-    public ApiResponse<Map<String, Object>> placeOrder(
+    public ApiResponse<OrderDetail> placeOrder(
             @PathVariable Boolean isSingleProductCheckout,
             @RequestBody OrderInput orderInput,
             @RequestHeader("Authorization") String authToken) throws Exception {
@@ -57,16 +57,16 @@ public class OrderDetailController {
         orderDetailService.markOrderAsNotDelivered(orderId);
     }
     @GetMapping("/pdf")
-    public void returnPdf(HttpServletResponse response) throws Exception {
-        Map<String, Object> stringObjectMap= orderDetailService.getPdf();
+    public ApiResponse<List<Object>> returnPdf(HttpServletResponse response) throws Exception {
+        return orderDetailService.getPdf();
 
-        response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "attachment;filename=sample.pdf");
-        byte[] pdfBytes = (byte[])stringObjectMap.get("pdfBytes");
-
-        response.getOutputStream().write(pdfBytes);
-
-
+//        response.setContentType("application/pdf");
+//        response.setHeader("Content-Disposition", "attachment;filename=sample.pdf");
+////        byte[] pdfBytes = (byte[])stringObjectMap.get("pdfBytes");
+//
+//        response.getOutputStream().write(pdfBytes);
+////
+//
 //        String mimeType = URLConnection.guessContentTypeFromName(file.getName()); // for you it would be application/pdf
 //        if (mimeType == null) mimeType = "application/octet-stream";
 //        response.setContentType(mimeType);
@@ -74,5 +74,6 @@ public class OrderDetailController {
 //        response.setContentLength((int) file.length());
 //        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
 //        FileCopyUtils.copy(inputStream, response.getOutputStream());
-    }
+//    }
+}
 }

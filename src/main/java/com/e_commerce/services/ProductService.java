@@ -12,7 +12,7 @@ public interface ProductService {
 
     ApiResponse<Product> saveProduct(Product product);
 
-    ApiResponse<List<Product>> getAllProducts(Integer pageNumber, Integer pageSize, String searchKey);
+    ApiResponse<List<Product>> getAllProducts();    //Integer pageNumber, Integer pageSize, String searchKey
 
     void deleteProductDetails(Integer productId);
 

@@ -17,25 +17,27 @@ public class FetchImage {
     private final HelperUtils helperUtils;
     @SneakyThrows
     public byte[] getFile(String fullFilePath){
-        System.out.println("fullFilePath: "+fullFilePath);
-        System.out.println("HelperUtils.LASTFOLDERPATH+fullFilePath: "+ helperUtils.getPathForImage()+fullFilePath);
+//        System.out.println("fullFilePath: "+fullFilePath);
+//        System.out.println("HelperUtils.LASTFOLDERPATH+fullFilePath: "+ helperUtils.getPathForImage()+fullFilePath);
         InputStream inputStream = null;
 
-        String currentDirectory = System.getProperty("user.dir");
-        File currentDir = new File(currentDirectory);
+//        String currentDirectory = System.getProperty("user.dir");
+//        File currentDir = new File(currentDirectory);
+
+        String imagePath= helperUtils.getPathForImage()+fullFilePath;
 
         // Get the parent directory
-        File parentDir = currentDir.getParentFile();
-        String parentPath =null;
-        if (parentDir != null) {
-            // Get the absolute path of the parent directory
-            parentPath = parentDir.getAbsolutePath();
-            parentPath= parentPath+ "/images/";
-            System.out.println("Parent directory: " + parentPath);
-        }
-        System.out.println(currentDirectory);
+//        File parentDir = currentDir.getParentFile();
+//        String parentPath =null;
+//        if (parentDir != null) {
+//            // Get the absolute path of the parent directory
+//            parentPath = parentDir.getAbsolutePath();
+//            parentPath= parentPath+ "/images/";
+//            System.out.println("Parent directory: " + parentPath);
+//        }
+        System.out.println(imagePath);
         try {
-            File file = new File(parentPath+ fullFilePath);
+            File file = new File(imagePath);
 //            File file = new File(HelperUtils.LASTFOLDERPATH + "/"+ fullFilePath);
             inputStream = new FileInputStream(file);
 

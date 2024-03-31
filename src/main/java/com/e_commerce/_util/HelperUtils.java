@@ -36,8 +36,9 @@ public class HelperUtils {
         }
         return user;
     }
-    public static String LASTFOLDERPATH = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/images";
-//    public static String LASTFOLDERPATH =System.getProperty("user.dir");
+//    public static String LASTFOLDERPATH = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/images";
+//    public static String LASTFOLDERPATH ="C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1_Tomcat1.0\\webapps\\images";
+    public static String LASTFOLDERPATH =System.getProperty("user.dir");
 
      public static String FILEPATH = "/";
     private final ResourceLoader resourceLoader;
@@ -48,20 +49,17 @@ public class HelperUtils {
 
     @SneakyThrows
     public  String getPathForImage()  {
-        Resource resource = resourceLoader.getResource("classpath:static/images");
-        File currentDir = new File(resource.getURI());
-//        File currentDir = new File(currentDirectory);
 
-        // Get the parent directory
-        File parentDir = currentDir.getParentFile();
-        String parentPath =null;
-        if (parentDir != null) {
-            // Get the absolute path of the parent directory
-            parentPath = parentDir.getAbsolutePath();
-            parentPath= parentPath+ "/images/";
-            System.out.println("Parent directory: " + parentPath);
-        }
-        return parentPath;
+        File currentDir = new File(LASTFOLDERPATH);
+        String imagesDir= currentDir.getAbsolutePath()+"/images/";
+        return imagesDir;
+    }
+
+    public  String getPathForPdf()  {
+
+        File currentDir = new File(LASTFOLDERPATH);
+        String pdfDir= currentDir.getAbsolutePath()+"/src/main/resources/static/pdf/";
+        return pdfDir;
     }
 
 

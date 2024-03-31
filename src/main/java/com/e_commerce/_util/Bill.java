@@ -6,9 +6,11 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import java.io.ByteArrayOutputStream;
+
+import java.io.*;
 
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -38,21 +40,36 @@ import static com.itextpdf.kernel.pdf.PdfName.User;
 @RequiredArgsConstructor
 public class Bill {
 
-//    public class BillGenerator {
-
+    private final HelperUtils helperUtils;
     private final ImagePathProvider imagePathProvider;
 
 
-        public  byte[] generateBillByteArray(OrderDetail orderDetail) {
-
-            // Prepare output stream for the generated PDF
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        @SneakyThrows
+        public  String generateBillByteArray(OrderDetail orderDetail)  {
+//
+//            String pdfPath= helperUtils.getPathForPdf();
+////            +orderDetail.getOrderId()+".pdf";
+//
+//            File mainFilePath = new File(pdfPath);
+//
+//            if (!mainFilePath.exists()) {
+//                System.out.println("path ban raha he-------------------------------------------------------------------");
+//                mainFilePath.mkdirs();
+//                System.out.println(pdfPath);
+//
+//            }
+//
+//            // Prepare output stream for the generated PDF
+//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//            FileOutputStream fos= new FileOutputStream(helperUtils.getPathForPdf()+orderDetail.getOrderId()+".pdf");
+//
 
 //        Double totalIgst= 0.0, totalCgst= 0.0, totalSgst= 0.0, totalAmount= 0.0, totalGstAmount= 0.0, invoiceAmount= 0.0;
             Double totalActualPrice= 0.0, totalDiscountedPrice= 0.0;
             PdfWriter pdfWriter;
             try {
-                pdfWriter = new PdfWriter(outputStream);
+//                pdfWriter = new PdfWriter("D:\\sample.pdf");
+                pdfWriter = new PdfWriter(helperUtils.getPathForPdf()+"\\"+orderDetail.getOrderId()+".pdf");
                 PdfDocument pdfDocument = new PdfDocument(pdfWriter);
                 Document document = new Document(pdfDocument);
 
@@ -62,7 +79,7 @@ public class Bill {
                 float colWidthForHeading[]= {600};
                 Table tableForHeading= new Table(colWidthForHeading);
 
-                tableForHeading.addCell(new Cell().add("E-Cart Pvt Ltd")
+                tableForHeading.addCell(new Cell().add("IAF Canteen")
                         .setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.CENTER).setFontSize(30f).setFontColor(Color.GRAY)
                         .setBold()
                 );
@@ -91,7 +108,7 @@ public class Bill {
                 headerTable.addCell(new Cell().add(" Contact us: 1800 208 9898 "  )
                         .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderBottom(Border.NO_BORDER)
                 );
-                headerTable.addCell(new Cell().add(" email: vaibhavgaur801945@gmail.comdasd ")
+                headerTable.addCell(new Cell().add(" email: iafcanteen@gmail.comdasd ")
                         .setFontSize(11)
                         .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderBottom(Border.NO_BORDER)
                 );
@@ -119,7 +136,8 @@ public class Bill {
                 orderAddressDetailsTable.addCell(new Cell().add(orderDetail.getOrderId())
                         .setBold().setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderBottom(Border.NO_BORDER)
                 );
-                orderAddressDetailsTable.addCell(new Cell().add(orderDetail.getSelectedStore())
+                orderAddressDetailsTable.addCell(new Cell().add("xyz")
+//                        orderDetail.getSelectedStore()
                         .setBold().setBold().setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderBottom(Border.NO_BORDER)
                 );
                 orderAddressDetailsTable.addCell(new Cell().add(orderDetail.getDeliveryAddress())
@@ -288,16 +306,21 @@ public class Bill {
 
 
 
+
+
                 System.out.println("PDF generated successfully.");
 
                 // Close the document
                 document.close();
 
+//                fos.write(outputStream.to);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            return outputStream.toByteArray();
+            return helperUtils.getPathForPdf()+"\\"+orderDetail.getOrderId()+".pdf";
+//            return outputStream.toByteArray();
         }
     }
 
