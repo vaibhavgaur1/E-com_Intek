@@ -33,12 +33,13 @@ public class CategoryServiceImpl implements CategoryService {
     public ApiResponse<CategoryDto> addCategory(CategoryDto categoryDto) {
 
         Boolean isExists= categoryRepository.existsByName(categoryDto.getName());
-
         if(isExists)
             throw new Exception("Category with name "+categoryDto.getName()+" already exists!");
         Category category= Category.builder()
                 .name(categoryDto.getName())
                 .description(categoryDto.getDescription())
+                .type(categoryDto.getType())
+                .uploadId(categoryDto.getUploadId())
                 .build();
 
         CategoryDto categoryDto1 = categoryRepository.save(category).getDto();
@@ -79,7 +80,8 @@ public class CategoryServiceImpl implements CategoryService {
                             .description(category.getDescription())
                             .totalProducts(productDao.countByColumnName(category.getId()))
 //                            .image(category.getImage())
-//                            .uploadId(category.getUploadId())
+                            .uploadId(category.getUploadId())
+                            .type(category.getType())
 //                            .imageUrl(category.getImageUrl())
                             .build()
             );

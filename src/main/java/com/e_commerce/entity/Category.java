@@ -22,6 +22,8 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column
+    private String type;
     @Column(length = 100, unique = true)
     private String name;
     @Column(length = 500)
@@ -30,7 +32,8 @@ public class Category {
 //    private String imageUrl;
 
 //    private byte[] image;
-//    private String uploadId;
+    @Column
+    private String uploadId;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     @JsonBackReference
@@ -42,6 +45,8 @@ public class Category {
                 .name(name)
                 .id(id)
                 .description(description)
+                .type(type)
+                .uploadId(uploadId)
                 .build();
     }
 }

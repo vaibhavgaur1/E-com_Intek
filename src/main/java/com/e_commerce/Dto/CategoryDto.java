@@ -13,4 +13,5 @@ public class CategoryDto {
     private String uploadId;
     private byte[] image;
     private String imageUrl;
+    private String type;
 }
