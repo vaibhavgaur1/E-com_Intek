@@ -51,7 +51,7 @@ public class HelperUtils {
     public  String getPathForImage()  {
 
         File currentDir = new File(LASTFOLDERPATH);
-        String imagesDir= currentDir.getAbsolutePath()+"/images/";
+        String imagesDir= currentDir.getAbsolutePath()+"/webapps/images/";
         return imagesDir;
     }
 
