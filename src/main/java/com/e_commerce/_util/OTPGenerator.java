@@ -20,7 +20,7 @@ public class OTPGenerator {
                       sb.append(digit);
                   }
                   String otp = sb.toString();
-                  System.out.println(" successfull : "+otp);
+                  System.out.println(" successfull : "+   otp);
                   return Long.valueOf(otp);
               }catch (Exception e){
                   throw new Exception("otp can not generate");

@@ -58,7 +58,8 @@ public class HelperUtils {
     public  String getPathForPdf()  {
 
         File currentDir = new File(LASTFOLDERPATH);
-        String pdfDir= currentDir.getAbsolutePath()+"/src/main/resources/static/pdf/";
+        String pdfDir= currentDir.getAbsolutePath()+"\\src\\main\\resources\\static\\pdf\\";
+//        String pdfDir= currentDir.getAbsolutePath()+" /pdf/ ";
         return pdfDir;
     }
 

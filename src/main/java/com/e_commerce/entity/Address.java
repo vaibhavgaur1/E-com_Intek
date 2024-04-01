@@ -29,7 +29,7 @@ public class Address {
     @JsonBackReference
     private User user;
 
-    public AddressDto getDto(){
+    public AddressDto generateDto(){
         return AddressDto.builder()
                 .id(id)
                 .flatNumberOrHouseNumber(flatNumberOrHouseNumber)

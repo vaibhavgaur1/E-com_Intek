@@ -75,9 +75,14 @@ public class CartServiceImpl implements CartService {
         return totalAmount;
     }
 
-    public ApiResponse<List<Cart>> getCartDetailsOfUser(String authHeader) throws Exception {
+//    public ApiResponse<List<Cart>> getCartDetailsOfUser(String authHeader) throws Exception { //throw new Exception("user is disabled")
+        public ApiResponse<List<Cart>> getCartDetailsOfUser(String authHeader) throws Exception {
         User dbUser = helperUtils.getUserFromAuthToken(authHeader);
         List<Cart> dbCartList = cartDao.findByUser(dbUser);
+            // Check if the cart list is empty
+            if (dbCartList.isEmpty()) {
+                throw new Exception("No products found in the cart for the user");
+            }
         dbCartList.forEach(dbCart-> {
             FileUpload dbFileUploadForProduct = null;
             try {

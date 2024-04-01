@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +59,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         for (OrderProductQuantity orderProductQuantity : productQuantityList) {
             Product product = productDao.findById(orderProductQuantity.getProductId()).get();
             totalProductAmount= orderProductQuantity.getQuantity() * product.getProductDiscountedPrice();
+            totalAmount+= totalProductAmount;
+            orderProductQuantity.setTotalProductAmount(totalProductAmount);
 
         }
         OrderDetail orderDetail = OrderDetail.builder()
@@ -68,8 +71,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 .contactNo(orderInput.getContactNumber())
                 .alternateContactNumber(orderInput.getAlternateContactNumber())
                 .orderStatus(ORDER_PLACED)
-                .totalOrderAmount(orderInput.getTotalAmount())
+                .totalOrderAmount(totalAmount)
                 .user(dbUser)
+                .orderDate(new Date(System.currentTimeMillis()))
                 .build();
 
         OrderDetail savedOrderDetail = orderDetailDao.save(orderDetail);
@@ -96,21 +100,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
 
 
-
-
-//            OrderDetail orderDetail = OrderDetail.builder()
-//                    .orderId(HelperUtils.generateOrderId())
-//                    .orderByName(orderInput.getFullName())
-//                    .deliveryAddress(orderInput.getFullAddress())
-//                    .selectedStore(orderInput.getSelectedStore())
-//                    .contactNo(orderInput.getContactNumber())
-//                    .alternateContactNumber(orderInput.getAlternateContactNumber())
-//                    .orderStatus(ORDER_PLACED)
-//                    .totalOrderAmount(dbProduct.getProductDiscountedPrice() * orderProductQuantity.getQuantity())
-////                    .product(dbProduct)
-//                    .user(dbUser)
-//                    .build();
-
             List<Cart> dbListCart = cartDao.findByUser(dbUser);
             if(!isSingleProductCheckout){
                 dbListCart.forEach(cartDao::delete);
@@ -124,6 +113,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         savedOrderDetail.setUserOrders(userOrdersList);
         String pathForPdf = billGenerator.generateBillByteArray(savedOrderDetail);
         orderDetailDao.setPdfUrl(savedOrderDetail.getId(), pathForPdf);
+        savedOrderDetail.setPdfUrl(pathForPdf);
 
         orderDetail.setUserOrders(userOrdersList);
 
@@ -134,7 +124,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 //        map.put("pdfName", orderDetail.getOrderId());
 //        map.put("pdfByte", pdfBytes);
 
-        return ResponseUtils.createSuccessResponse(orderDetail, new TypeReference<OrderDetail>() {});
+        return ResponseUtils.createSuccessResponse(savedOrderDetail, new TypeReference<OrderDetail>() {});
     }
 
 

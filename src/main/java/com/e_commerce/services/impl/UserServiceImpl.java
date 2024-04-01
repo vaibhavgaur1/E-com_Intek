@@ -240,7 +240,7 @@ public class UserServiceImpl implements UserService {
         if (userDao.existsById(userId)){
             List<AddressDto> addressDtos = addressDao.findByUserId(userId)
                     .stream()
-                    .map(Address::getDto)
+                    .map(Address::generateDto)
                     .toList();
             return ResponseUtils.createSuccessResponse(addressDtos, new TypeReference<List<AddressDto>>() {});
         }else{

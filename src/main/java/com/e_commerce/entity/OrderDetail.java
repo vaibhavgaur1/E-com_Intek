@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
+import java.sql.Date;
 import java.util.List;
 
 @Entity
@@ -24,6 +25,7 @@ public class OrderDetail {
     private String alternateContactNumber;
     private String orderStatus;
     private Double totalOrderAmount;
+    private Date orderDate;
 
     @ManyToOne( fetch = FetchType.LAZY)
     private User user;

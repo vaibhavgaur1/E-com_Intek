@@ -69,7 +69,7 @@ public class Bill {
             PdfWriter pdfWriter;
             try {
 //                pdfWriter = new PdfWriter("D:\\sample.pdf");
-                pdfWriter = new PdfWriter(helperUtils.getPathForPdf()+"\\"+orderDetail.getOrderId()+".pdf");
+                pdfWriter = new PdfWriter(helperUtils.getPathForPdf()+orderDetail.getOrderId()+".pdf");
                 PdfDocument pdfDocument = new PdfDocument(pdfWriter);
                 Document document = new Document(pdfDocument);
 
@@ -128,7 +128,7 @@ public class Bill {
                 document.add(headerTable);
 
 
-                float [] forOrderAddressDetails = {55, 60, 60};
+                float [] forOrderAddressDetails = {60, 150, 60};
                 Table orderAddressDetailsTable= new Table(forOrderAddressDetails);
 //            orderAddressDetailsTable.setBorder(Border.NO_BORDER);
 
@@ -136,24 +136,24 @@ public class Bill {
                 orderAddressDetailsTable.addCell(new Cell().add(orderDetail.getOrderId())
                         .setBold().setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderBottom(Border.NO_BORDER)
                 );
-                orderAddressDetailsTable.addCell(new Cell().add("xyz")
+                orderAddressDetailsTable.addCell(new Cell().add("Billing Address")
 //                        orderDetail.getSelectedStore()
                         .setBold().setBold().setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderBottom(Border.NO_BORDER)
                 );
-                orderAddressDetailsTable.addCell(new Cell().add(orderDetail.getDeliveryAddress())
+                orderAddressDetailsTable.addCell(new Cell().add("Shipping Address")
                         .setBold().setBold().setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderBottom(Border.NO_BORDER)
                 );
 
-                orderAddressDetailsTable.addCell(new Cell().add("address")
+                orderAddressDetailsTable.addCell(new Cell().add(""+orderDetail.getOrderDate())
                         .setBold().setBorder(Border.NO_BORDER)
                 );
-                orderAddressDetailsTable.addCell(new Cell(3, 1).add("Hitesh Villa  room no. 117, Hostel H block  " +
-                                "Noida, 201301, Uttar Pradesh ")
+
+
+                orderAddressDetailsTable.addCell(new Cell(2, 1).add(orderDetail.getSelectedStore())
                         .setBold().setBorder(Border.NO_BORDER)
                 );
 //            orderAddressDetailsTable.addCell(new Cell().add("Shipping Address").setBold());
-                orderAddressDetailsTable.addCell(new Cell(3, 1).add("Hitesh Villa  room no. 117, Hostel H block " +
-                                "Noida, 201301, Uttar Pradesh ")
+                orderAddressDetailsTable.addCell(new Cell(2, 1).add(orderDetail.getDeliveryAddress())
                         .setBold().setBorder(Border.NO_BORDER)
                 );
                 orderAddressDetailsTable.addCell(new Cell().add("Invoice Date: 10/03/24")
@@ -162,15 +162,15 @@ public class Bill {
                 orderAddressDetailsTable.addCell(new Cell().add("VAT/TIN: 1563453242654")
                         .setBold().setBorder(Border.NO_BORDER)
                 );
-                orderAddressDetailsTable.addCell(new Cell().add("")
+                orderAddressDetailsTable.addCell(new Cell().add(orderDetail.getContactNo())
                         .setBold().setBold().setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderTop(Border.NO_BORDER)
                 );
-                orderAddressDetailsTable.addCell(new Cell().add("Phone Number: 7894561230")
+                orderAddressDetailsTable.addCell(new Cell().add(orderDetail.getAlternateContactNumber())
                         .setBold().setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderTop(Border.NO_BORDER)
                 );
-                orderAddressDetailsTable.addCell(new Cell().add(orderDetail.getContactNo())
-                        .setBold().setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderTop(Border.NO_BORDER)
-                );
+//                orderAddressDetailsTable.addCell(new Cell().add()
+//                        .setBold().setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderTop(Border.NO_BORDER)
+//                );
                 document.add(orderAddressDetailsTable);
 
 
@@ -207,89 +207,48 @@ public class Bill {
                     totalActualPrice += userOrders.getProduct().getProductActualPrice();
                     totalDiscountedPrice += userOrders.getProduct().getProductDiscountedPrice();
                     orderDetailsTable.addCell(new Cell().add(""+(i+1)).setBold()
-//                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
                     );
-                    orderDetailsTable.addCell(new Cell().add("Dummy Product "+userOrders.getProduct().getProductName()).setBold()
-//                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                    orderDetailsTable.addCell(new Cell().add(userOrders.getProduct().getProductName()).setBold()
+                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
                     );
-                    orderDetailsTable.addCell(new Cell().add("Intex Hp Rtx 4090 Titan with liquid cooling and vortex fan").setBold()
-//                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                    orderDetailsTable.addCell(new Cell().add("dummy short product description, change later if it is added in product").setBold()
+                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
                     );
+//                    orderDetailsTable.addCell(new Cell().add(userOrders.getProduct().getProductShortDescription()).setBold()
+//                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+//                    );
                     orderDetailsTable.addCell(new Cell().add(""+userOrders.getQuantity()).setBold()
-//                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
                     );
                     orderDetailsTable.addCell(new Cell().add(""+userOrders.getProduct().getProductActualPrice()).setBold()
-//                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
                     );
-                    orderDetailsTable.addCell(new Cell().add(""+userOrders.getProduct().getProductActualPrice()).setBold()
-//                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                    orderDetailsTable.addCell(new Cell().add(""+userOrders.getProduct().getProductDiscountedPrice()).setBold()
+                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
                     );
                     orderDetailsTable.addCell(new Cell().add(""+userOrders.getProductTotalAmount()).setBold()
-//                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                            .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
                     );
                 }
-
-
-
-
-                orderDetailsTable.addCell(new Cell().add("1").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-                );
-                orderDetailsTable.addCell(new Cell().add("Dummy Product ").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-                );
-                orderDetailsTable.addCell(new Cell().add("Intex Hp Rtx 4090 Titan with liquid cooling and vortex fan").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-                );
-                orderDetailsTable.addCell(new Cell().add("1 ").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-                );
-                orderDetailsTable.addCell(new Cell().add("10,00,00,000 ").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-                );
-                orderDetailsTable.addCell(new Cell().add("10,00,00, 000 ").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-                );
-                orderDetailsTable.addCell(new Cell().add("10,00,00,000 ").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-                );
-//
-//                orderDetailsTable.addCell(new Cell().add("1").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-//                );
-//                orderDetailsTable.addCell(new Cell().add("Dummy Product ").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-//                );
-//                orderDetailsTable.addCell(new Cell().add("Intex Hp Rtx 4090 Titan with liquid cooling and vortex fan").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-//                );
-//                orderDetailsTable.addCell(new Cell().add("1 ").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-//                );
-//                orderDetailsTable.addCell(new Cell().add("10,00,00,000 ").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-//                );
-//                orderDetailsTable.addCell(new Cell().add("10,00,00, 000 ").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-//                );
-//                orderDetailsTable.addCell(new Cell().add("10,00,00,000 ").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
-//                );
-
 
                 //row for total and total price
 
                 orderDetailsTable.addCell(new Cell(1, 4).add("Total").setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT)
+                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                        .setTextAlignment(TextAlignment.RIGHT)
                 );
                 orderDetailsTable.addCell(new Cell().add(""+totalActualPrice).setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                        .setTextAlignment(TextAlignment.CENTER)
                 );
                 orderDetailsTable.addCell(new Cell().add(""+totalDiscountedPrice).setBold()
-//                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                        .setTextAlignment(TextAlignment.CENTER)
                 );
                 orderDetailsTable.addCell(new Cell().add(""+orderDetail.getTotalOrderAmount()).setBold()
                         .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                        .setTextAlignment(TextAlignment.CENTER)
                 );
 
                 orderDetailsTable.addCell(new Cell(1, 5).add("Grand Total: ").setBold()
@@ -297,7 +256,8 @@ public class Bill {
                         .setTextAlignment(TextAlignment.RIGHT).setVerticalAlignment(VerticalAlignment.MIDDLE)
                 );
                 orderDetailsTable.addCell(new Cell(1, 2).add(""+orderDetail.getTotalOrderAmount()).setBold()
-                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE)
+                        .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
+                        .setVerticalAlignment(VerticalAlignment.MIDDLE).setTextAlignment(TextAlignment.CENTER)
                 );
 
                 document.add(orderDetailsTable);
@@ -319,7 +279,7 @@ public class Bill {
                 e.printStackTrace();
             }
 
-            return helperUtils.getPathForPdf()+"\\"+orderDetail.getOrderId()+".pdf";
+            return helperUtils.getPathForPdf()+orderDetail.getOrderId()+".pdf";
 //            return outputStream.toByteArray();
         }
     }

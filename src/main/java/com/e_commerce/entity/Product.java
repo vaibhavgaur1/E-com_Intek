@@ -69,7 +69,7 @@ public class Product {
     @JsonIgnore
     private Category category;
 
-    public ProductDto getDto() {
+    public ProductDto generateDto() {
         return ProductDto.builder()
                 .productId(productId)
                 .productName(productName)
