@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -76,14 +77,26 @@ public class CartServiceImpl implements CartService {
     }
 
 //    public ApiResponse<List<Cart>> getCartDetailsOfUser(String authHeader) throws Exception { //throw new Exception("user is disabled")
-        public ApiResponse<List<Cart>> getCartDetailsOfUser(String authHeader) throws Exception {
+        public ApiResponse<List<Cart>> getCartDetailsOfUser(String cardType, String authHeader) throws Exception {
         User dbUser = helperUtils.getUserFromAuthToken(authHeader);
         List<Cart> dbCartList = cartDao.findByUser(dbUser);
+        List<Cart> dbCartListSorted=new ArrayList<Cart>();
 
-            if (dbCartList.isEmpty()) {
+        if (dbCartList.isEmpty()) {
+                throw new Exception("No products found in the cart for the user");
+        }
+
+            for (Cart cart : dbCartList) {
+                if (cart.getProduct().getCategory().getType().equalsIgnoreCase(cardType)) {
+                    dbCartListSorted.add(cart);
+                }
+            }
+            if (dbCartListSorted.isEmpty()) {
                 throw new Exception("No products found in the cart for the user");
             }
-        dbCartList.forEach(dbCart-> {
+
+
+            dbCartListSorted.forEach(dbCart-> {
             FileUpload dbFileUploadForProduct = null;
             try {
                 dbFileUploadForProduct = fileUploadRepository.findById(dbCart.getProduct().getUploadId())

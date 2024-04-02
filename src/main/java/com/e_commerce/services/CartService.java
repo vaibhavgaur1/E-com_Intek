@@ -9,6 +9,6 @@ public interface CartService {
 
     ApiResponse<Cart> addToCart(Integer productId, String authHeader) throws Exception;
 
-    ApiResponse<List<Cart>> getCartDetailsOfUser(String authHeader) throws Exception;
+    ApiResponse<List<Cart>> getCartDetailsOfUser(String cardType, String authHeader) throws Exception;
     void deleteCartItem(Integer cartId);
 }

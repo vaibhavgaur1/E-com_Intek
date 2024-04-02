@@ -31,9 +31,9 @@ public class CartController {
     }
 
 
-    @GetMapping("/getCartDetailsOfUser")
+    @GetMapping("/getCartDetailsOfUser/{cardType}")
     @PreAuthorize("hasAuthority('USER')")
-    public ApiResponse<List<Cart>> getCartDetailsOfUser(@RequestHeader("Authorization") String authHeader) throws Exception {
-        return cartService.getCartDetailsOfUser(authHeader);
+    public ApiResponse<List<Cart>> getCartDetailsOfUser(@PathVariable String cardType,@RequestHeader("Authorization") String authHeader) throws Exception {
+        return cartService.getCartDetailsOfUser(cardType,authHeader);
     }
 }
