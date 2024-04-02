@@ -57,14 +57,7 @@ public class ProductServiceImpl implements ProductService {
 
         if(searchKey== null || searchKey.isEmpty() || searchKey.isBlank())
         {
-            List<Product> dbProdct =(List<Product>) productDao.findAll();    //pageable
-            List<Product> dbProducts=new ArrayList<>();
-            for (Product prod : dbProdct) {
-                if (prod.getCategory().getType().equalsIgnoreCase(cardType)) {
-                    dbProducts.add(prod);
-                }
-            }
-//            List<Product> dbProducts =(List<Product>) productDao.findAll();    //pageable
+            List<Product> dbProducts=(List<Product>) productDao.findAllByCategoryType(cardType);
             System.out.println(dbProducts.size());
             List<Product> withImage= new ArrayList<>();
             dbProducts.forEach(dbProduct->{

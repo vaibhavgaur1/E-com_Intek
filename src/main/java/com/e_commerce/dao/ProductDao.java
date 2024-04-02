@@ -20,4 +20,6 @@ public interface ProductDao extends CrudRepository<Product, Integer> {
     @Query("SELECT COUNT(e) FROM Product e WHERE e.category.id = :value")
     Long countByColumnName(@Param("value") Long categoryId);
 
+    @Query("SELECT p FROM Product p JOIN p.category c WHERE c.type = :categoryType")
+    List<Product> findAllByCategoryType(@Param("categoryType") String categoryType);
 }
