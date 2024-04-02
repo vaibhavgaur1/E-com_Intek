@@ -50,14 +50,21 @@ public class ProductServiceImpl implements ProductService {
         return ResponseUtils.createSuccessResponse(productDao.save(product), new TypeReference<Product>() {});
     }
 
-    public ApiResponse<List<Product>> getAllProducts(String searchKey)
+    public ApiResponse<List<Product>> getAllProducts(String cardType,String searchKey)
 //    Integer pageNumber, Integer pageSize, String searchKey
     {
 //        Pageable pageable= PageRequest.of(pageNumber, pageSize);
 
         if(searchKey== null || searchKey.isEmpty() || searchKey.isBlank())
         {
-            List<Product> dbProducts =(List<Product>) productDao.findAll();    //pageable
+            List<Product> dbProdct =(List<Product>) productDao.findAll();    //pageable
+            List<Product> dbProducts=new ArrayList<>();
+            for (Product prod : dbProdct) {
+                if (prod.getCategory().getType().equalsIgnoreCase(cardType)) {
+                    dbProducts.add(prod);
+                }
+            }
+//            List<Product> dbProducts =(List<Product>) productDao.findAll();    //pageable
             System.out.println(dbProducts.size());
             List<Product> withImage= new ArrayList<>();
             dbProducts.forEach(dbProduct->{
