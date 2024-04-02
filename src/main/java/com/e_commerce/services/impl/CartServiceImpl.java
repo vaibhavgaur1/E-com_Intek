@@ -107,7 +107,7 @@ public class CartServiceImpl implements CartService {
                 throw new RuntimeException("no image url found");
             }
         });
-        return ResponseUtils.createSuccessResponse(dbCartList, new TypeReference<List<Cart>>() {});
+        return ResponseUtils.createSuccessResponse(dbCartListSorted, new TypeReference<List<Cart>>() {});
     }
 
     public void deleteCartItem(Integer cartId) {

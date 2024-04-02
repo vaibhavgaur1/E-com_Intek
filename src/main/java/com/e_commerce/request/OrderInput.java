@@ -20,4 +20,5 @@ public class OrderInput {
     private Double totalAmount;
 
     private List<OrderProductQuantity>  orderProductQuantityList;
+    private String cardType;
 }
