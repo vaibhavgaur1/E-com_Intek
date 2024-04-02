@@ -11,6 +11,7 @@ import com.e_commerce.response.ApiResponse;
 import com.e_commerce.services.OrderDetailService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -161,9 +162,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         dbOrderDetail.setOrderStatus("NOT_DELIVERED");
         orderDetailDao.save(dbOrderDetail);
     }
-    public ApiResponse<List<Object>> getPdf() {
+    @SneakyThrows
+    public ApiResponse<List<Object>> getPdf(String orderId) {
 
-        OrderDetail orderDetail = orderDetailDao.findAll().get(0);
+        OrderDetail orderDetail = orderDetailDao.findByOrderId(orderId)
+                .orElseThrow(() -> new Exception("order not found!!"));
         Map<String, Object> response = new HashMap<>();
 
 

@@ -38,7 +38,7 @@ public class Product {
 //    private FileUpload fileUpload;
 
 //    @Lob
-    private byte[] image;
+    private String image;
 
 //    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    @JoinTable(
@@ -66,7 +66,7 @@ public class Product {
 
     @ManyToOne
     @JsonManagedReference
-    @JsonIgnore
+//    @JsonIgnore
     private Category category;
 
     public ProductDto generateDto() {

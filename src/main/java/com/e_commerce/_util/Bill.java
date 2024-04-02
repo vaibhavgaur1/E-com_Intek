@@ -69,6 +69,7 @@ public class Bill {
             PdfWriter pdfWriter;
             try {
 //                pdfWriter = new PdfWriter("D:\\sample.pdf");
+//                pdfWriter = new PdfWriter(helperUtils.getCompletePdf()+orderDetail.getOrderId()+".pdf");
                 pdfWriter = new PdfWriter(helperUtils.getPathForPdf()+orderDetail.getOrderId()+".pdf");
                 PdfDocument pdfDocument = new PdfDocument(pdfWriter);
                 Document document = new Document(pdfDocument);

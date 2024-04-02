@@ -20,5 +20,5 @@ public interface OrderDetailService {
 
     void markOrderAsNotDelivered(Integer orderId) throws Exception;
 
-    ApiResponse<List<Object>> getPdf();
+    ApiResponse<List<Object>> getPdf(String orderId);
 }

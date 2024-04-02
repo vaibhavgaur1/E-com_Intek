@@ -62,10 +62,10 @@ public class ProductController {
     public ApiResponse<List<Product>> getAllProducts(
 //                                                     @RequestParam(defaultValue = "0")Integer pageNumber,
 //                                                     @RequestParam(defaultValue = "6")Integer pageSize,
-//                                                     @RequestParam(defaultValue = "")String searchKey
+                                                     @RequestParam(defaultValue = "")String searchKey
     ){
-//        System.out.println(searchKey);
-        return productService.getAllProducts();   //pageNumber, pageSize, searchKey
+        System.out.println(searchKey);
+        return productService.getAllProducts(searchKey);   //pageNumber, pageSize, searchKey
     }
 
     //    @PreAuthorize("hasAuthority('ADMIN')")

@@ -15,7 +15,7 @@ public interface ProductDao extends CrudRepository<Product, Integer> {
 
     public List<Product> findAll(Pageable pageable);
 
-    public List<Product> findByProductNameContainingIgnoreCaseOrProductDescriptionContainingIgnoreCase(String searchKey1, String searchKey2, Pageable pageable);
+    public List<Product> findByProductNameContainingIgnoreCaseOrProductDescriptionContainingIgnoreCase(String searchKey1 , String searchKey2);
 
     @Query("SELECT COUNT(e) FROM Product e WHERE e.category.id = :value")
     Long countByColumnName(@Param("value") Long categoryId);

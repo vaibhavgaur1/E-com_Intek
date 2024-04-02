@@ -11,12 +11,15 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderDetailDao extends JpaRepository<OrderDetail, Integer> {
 //    @EntityGraph(attributePaths = {"userOrders"})
     public List<OrderDetail> findByUser(User user);
     public List<OrderDetail> findByOrderStatus(String status);
+
+    Optional<OrderDetail> findByOrderId(String orderId);
 
     @Transactional
     @Modifying

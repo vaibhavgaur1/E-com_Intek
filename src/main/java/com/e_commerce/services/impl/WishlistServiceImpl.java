@@ -60,8 +60,8 @@ public class WishlistServiceImpl implements WishlistService {
             FileUpload dbFileUploadForProduct = fileUploRepository.findById(dbProduct.getUploadId())
                     .orElseThrow(()->new Exception("no image url found"));
 
-            byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
-            dbProduct.setImage(file);
+//            byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
+//            dbProduct.setImage(file);
             return ResponseUtils.createSuccessResponse(savedWishlist, new TypeReference<Wishlist>() {});
         }
         return null;
@@ -75,8 +75,8 @@ public class WishlistServiceImpl implements WishlistService {
             try {
                 dbFileUploadForProduct = fileUploRepository.findById(dbWish.getProduct().getUploadId())
                         .orElseThrow(()->new Exception("no image url found"));
-                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
-                dbWish.getProduct().setImage(file);
+//                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
+//                dbWish.getProduct().setImage(file);
             } catch (Exception e) {
                 throw new RuntimeException("no image url found");
             }
@@ -92,8 +92,8 @@ public class WishlistServiceImpl implements WishlistService {
             try {
                 dbFileUploadForProduct = fileUploRepository.findById(dbWish.getProduct().getUploadId())
                         .orElseThrow(()->new Exception("no image url found"));
-                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
-                dbWish.getProduct().setImage(file);
+//                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
+//                dbWish.getProduct().setImage(file);
             } catch (Exception e) {
                 throw new RuntimeException("no image url found");
             }

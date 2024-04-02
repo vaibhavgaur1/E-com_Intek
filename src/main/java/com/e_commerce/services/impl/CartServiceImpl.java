@@ -53,8 +53,8 @@ public class CartServiceImpl implements CartService {
             FileUpload dbFileUploadForProduct = fileUploadRepository.findById(dbProduct.getUploadId())
                     .orElseThrow(()->new Exception("no image url found"));
 
-            byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
-            dbProduct.setImage(file);
+//            byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
+//            dbProduct.setImage(file);
             return ResponseUtils.createSuccessResponse(savedCart, new TypeReference<Cart>() {});
 //            return null;
         }
@@ -79,7 +79,7 @@ public class CartServiceImpl implements CartService {
         public ApiResponse<List<Cart>> getCartDetailsOfUser(String authHeader) throws Exception {
         User dbUser = helperUtils.getUserFromAuthToken(authHeader);
         List<Cart> dbCartList = cartDao.findByUser(dbUser);
-            // Check if the cart list is empty
+
             if (dbCartList.isEmpty()) {
                 throw new Exception("No products found in the cart for the user");
             }
@@ -88,8 +88,8 @@ public class CartServiceImpl implements CartService {
             try {
                 dbFileUploadForProduct = fileUploadRepository.findById(dbCart.getProduct().getUploadId())
                     .orElseThrow(()->new Exception("no image url found"));
-                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
-                dbCart.getProduct().setImage(file);
+//                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
+//                dbCart.getProduct().setImage(file);
             } catch (Exception e) {
                 throw new RuntimeException("no image url found");
             }

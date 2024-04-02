@@ -56,9 +56,9 @@ public class OrderDetailController {
     public void markOrderAsNotDelivered(@PathVariable Integer orderId) throws Exception {
         orderDetailService.markOrderAsNotDelivered(orderId);
     }
-    @GetMapping("/pdf")
-    public ApiResponse<List<Object>> returnPdf(HttpServletResponse response) throws Exception {
-        return orderDetailService.getPdf();
+    @GetMapping("/pdf/{orderId}")
+    public ApiResponse<List<Object>> returnPdf(@PathVariable String orderId) throws Exception {
+        return orderDetailService.getPdf(orderId);
 
 //        response.setContentType("application/pdf");
 //        response.setHeader("Content-Disposition", "attachment;filename=sample.pdf");

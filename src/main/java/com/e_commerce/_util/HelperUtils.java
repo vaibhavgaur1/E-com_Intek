@@ -55,11 +55,47 @@ public class HelperUtils {
         return imagesDir;
     }
 
+    @SneakyThrows
+    public  String getCompleteImage()  {
+
+        File currentDir = new File(LASTFOLDERPATH);
+        String imagesDir= "http://13.200.245.74:8083/images/";
+        return imagesDir;
+    }
+
+
     public  String getPathForPdf()  {
 
         File currentDir = new File(LASTFOLDERPATH);
-        String pdfDir= currentDir.getAbsolutePath()+"\\src\\main\\resources\\static\\pdf\\";
-//        String pdfDir= currentDir.getAbsolutePath()+" /pdf/ ";
+//        String pdfDir= currentDir.getAbsolutePath()+"\\src\\main\\resources\\static\\pdf\\";
+        String pdfDir= currentDir.getAbsolutePath()+"/webapps/pdf/";
+
+        File mainFilePath = new File(pdfDir);
+
+        if (!mainFilePath.exists()) {
+//            System.out.println("path ban raha he-------------------------------------------------------------------");
+            mainFilePath.mkdirs();
+//            System.out.println("path ban gaya he-------------------------------------------------------------------");
+
+        }
+
+        return pdfDir;
+    }
+    public  String getCompletePdf()  {
+
+        File currentDir = new File(LASTFOLDERPATH);
+//        String pdfDir= currentDir.getAbsolutePath()+"\\src\\main\\resources\\static\\pdf\\";
+        String pdfDir="http://13.200.245.74:8083/pdf/" ;   //currentDir.getAbsolutePath()+"/webapps/pdf/"
+
+        File mainFilePath = new File(pdfDir);
+
+        if (!mainFilePath.exists()) {
+//            System.out.println("path ban raha he-------------------------------------------------------------------");
+            mainFilePath.mkdirs();
+//            System.out.println("path ban gaya he-------------------------------------------------------------------");
+
+        }
+
         return pdfDir;
     }
 
