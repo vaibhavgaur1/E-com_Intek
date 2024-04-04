@@ -46,15 +46,21 @@ public class OrderDetailController {
         return orderDetailService.getAllOrderDetailsOfAdmin(status);
     }
 
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/markOrderAsDelivered/{orderId}")
     public void markOrderAsDelivered(@PathVariable Integer orderId) throws Exception {
         orderDetailService.markOrderAsDelivered(orderId);
     }
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/markOrderAsNotDelivered/{orderId}")
     public void markOrderAsNotDelivered(@PathVariable Integer orderId) throws Exception {
         orderDetailService.markOrderAsNotDelivered(orderId);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/ /{orderId}")
+    public void cancelOrder(@PathVariable Integer orderId) throws Exception {
+        orderDetailService.cancelOrder(orderId);
     }
     @GetMapping("/pdf/{orderId}")
     public ApiResponse<List<Object>> returnPdf(@PathVariable String orderId) throws Exception {

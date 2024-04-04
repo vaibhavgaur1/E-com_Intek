@@ -27,7 +27,7 @@ public class OrderDetail {
     private Double totalOrderAmount;
     private Date orderDate;
 
-    @ManyToOne( fetch = FetchType.LAZY)
+    @ManyToOne( fetch = FetchType.EAGER)
     private User user;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "orderDetail")

@@ -145,9 +145,9 @@ public class Bill {
                         .setBold().setBold().setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setBorderBottom(Border.NO_BORDER)
                 );
 
-                orderAddressDetailsTable.addCell(new Cell().add(""+orderDetail.getOrderDate())
-                        .setBold().setBorder(Border.NO_BORDER)
-                );
+//                orderAddressDetailsTable.addCell(new Cell().add(""+orderDetail.getOrderDate())
+//                        .setBold().setBorder(Border.NO_BORDER)
+//                );
 
 
                 orderAddressDetailsTable.addCell(new Cell(2, 1).add(orderDetail.getSelectedStore())
@@ -157,7 +157,7 @@ public class Bill {
                 orderAddressDetailsTable.addCell(new Cell(2, 1).add(orderDetail.getDeliveryAddress())
                         .setBold().setBorder(Border.NO_BORDER)
                 );
-                orderAddressDetailsTable.addCell(new Cell().add("Invoice Date: 10/03/24")
+                orderAddressDetailsTable.addCell(new Cell().add("Invoice Date: "+orderDetail.getOrderDate())
                         .setBold().setBorder(Border.NO_BORDER)
                 );
                 orderAddressDetailsTable.addCell(new Cell().add("VAT/TIN: 1563453242654")
@@ -252,11 +252,11 @@ public class Bill {
                         .setTextAlignment(TextAlignment.CENTER)
                 );
 
-                orderDetailsTable.addCell(new Cell(1, 5).add("Grand Total: ").setBold()
+                orderDetailsTable.addCell(new Cell(1, 5).add("GST").add("Grand Total: ").setBold()
                         .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER).setMarginRight(30f)
                         .setTextAlignment(TextAlignment.RIGHT).setVerticalAlignment(VerticalAlignment.MIDDLE)
                 );
-                orderDetailsTable.addCell(new Cell(1, 2).add(""+orderDetail.getTotalOrderAmount()).setBold()
+                orderDetailsTable.addCell(new Cell(1, 2).add("00.0").add(""+orderDetail.getTotalOrderAmount()).setBold()
                         .setBorderLeft(Border.NO_BORDER).setBorderRight(Border.NO_BORDER)
                         .setVerticalAlignment(VerticalAlignment.MIDDLE).setTextAlignment(TextAlignment.CENTER)
                 );
@@ -280,7 +280,7 @@ public class Bill {
                 e.printStackTrace();
             }
 
-            return helperUtils.getPathForPdf()+orderDetail.getOrderId()+".pdf";
+            return helperUtils.getUrlForPdf()+orderDetail.getOrderId()+".pdf";
 //            return outputStream.toByteArray();
         }
     }

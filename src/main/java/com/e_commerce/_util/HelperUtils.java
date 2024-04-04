@@ -62,6 +62,14 @@ public class HelperUtils {
         String imagesDir= "http://13.200.245.74:8083/images/";
         return imagesDir;
     }
+    @SneakyThrows
+    public  String getUrlForPdf()  {
+
+        File currentDir = new File(LASTFOLDERPATH);
+        String imagesDir= "http://13.200.245.74:8083/pdf/";
+        return imagesDir;
+    }
+
 
 
     public  String getPathForPdf()  {

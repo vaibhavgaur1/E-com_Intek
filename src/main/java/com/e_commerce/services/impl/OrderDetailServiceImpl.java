@@ -12,6 +12,7 @@ import com.e_commerce.services.OrderDetailService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -113,7 +114,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         });
         savedOrderDetail.setUserOrders(userOrdersList);
         String pathForPdf = billGenerator.generateBillByteArray(savedOrderDetail);
-        orderDetailDao.setPdfUrl(savedOrderDetail.getId(), pathForPdf);
+        orderDetailDao.setPdfUrl(savedOrderDetail.getId(), helperUtils.getPathForPdf()+savedOrderDetail.getOrderId()+".pdf");
         savedOrderDetail.setPdfUrl(pathForPdf);
 
         orderDetail.setUserOrders(userOrdersList);
@@ -131,7 +132,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     public ApiResponse<List<OrderDetail>> getOrderDetailsOfUser(String authToken) throws Exception {
         User dbUser = helperUtils.getUserFromAuthToken(authToken);
-        List<OrderDetail> byUser = orderDetailDao.findByUser(dbUser);
+
+//        orderDetailDao.findAll(Sort.by(Sort.Direction.DESC, ""));
+        Sort sort= Sort.by(Sort.Direction.DESC, "orderDate");
+        List<OrderDetail> byUser = orderDetailDao.findByUser(dbUser, sort);
 
 //        userOrderDao.findByOrderDetailId();
 //        orderDetailDao
@@ -164,9 +168,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
     @SneakyThrows
     public ApiResponse<List<Object>> getPdf(String orderId) {
-
+        System.out.println(orderId);
         OrderDetail orderDetail = orderDetailDao.findByOrderId(orderId)
                 .orElseThrow(() -> new Exception("order not found!!"));
+        System.out.println(orderDetail.getPdfUrl());
         Map<String, Object> response = new HashMap<>();
 
 
@@ -177,5 +182,15 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         return ApiResponse.<List<Object>>builder()
                 .response(List.of(pdfBytes, "pdfName"))
                 .build();
+    }
+
+    @SneakyThrows
+    @Override
+    public void cancelOrder(Integer orderId) {
+        OrderDetail dbOrderDetail = orderDetailDao.findById(orderId)
+                .orElseThrow(() -> new Exception("order not found!!"));
+
+        dbOrderDetail.setOrderStatus("CANCELLED");
+        orderDetailDao.save(dbOrderDetail);
     }
 }
