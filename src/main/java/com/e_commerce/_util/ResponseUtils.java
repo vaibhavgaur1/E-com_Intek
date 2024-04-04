@@ -51,7 +51,13 @@ public class ResponseUtils {
         response.setMessage(msg);
         return response;
     }
-
+    public <T> ApiResponse<T>  createFailure(String msg,Integer status){
+        ApiResponse<T> response  =   new ApiResponse<>();
+        //response.setResponse(data);
+        response.setStatus(status);
+        response.setMessage(msg);
+        return response;
+    }
 
 
 

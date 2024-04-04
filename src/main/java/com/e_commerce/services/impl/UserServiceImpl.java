@@ -37,37 +37,37 @@ public class UserServiceImpl implements UserService {
     private  final AddressDao addressDao;
 
     public ApiResponse<User> registerNewUser(RegisterDto registerDto) throws Exception {
-
+try{
         List<Otp> otpbyEmail = otpRepository.findByEmail(registerDto.getEmail());
-        if(otpbyEmail.isEmpty()){
-            throw new Exception("your email: "+registerDto.getEmail()+" has not been verified");
+        if (otpbyEmail.isEmpty()) {
+            throw new Exception("your email: " + registerDto.getEmail() + " has not been verified");
         }
-        if(!otpbyEmail.get(0).isVerified())
-            throw new Exception("your email: "+registerDto.getEmail()+" has not been verified");
+        if (!otpbyEmail.get(0).isVerified())
+            throw new Exception("your email: " + registerDto.getEmail() + " has not been verified");
 
 //        List<User> dbListUser = userDao.findByLiquorCardNumberOrGroceryCardNumber(registerDto.getName());
 //        if(!dbListUser.isEmpty())
 //            throw new Exception("User with id: "+registerDto.getName()+" is already present");
 
         List<User> userCard1 = userDao.findByLiquorCardNumber(registerDto.getLiquorCardNumber());
-        if(!userCard1.isEmpty())
-            throw new Exception("User with cardNo.: "+registerDto.getLiquorCardNumber()+" is already present");
+        if (!userCard1.isEmpty())
+            throw new Exception("User with cardNo.: " + registerDto.getLiquorCardNumber() + " is already present");
 
         List<User> userCard2 = userDao.findByGroceryCardNumber(registerDto.getGroceryCardNumber());
-        if(!userCard2.isEmpty())
-            throw new Exception("User with cardNo.: "+registerDto.getGroceryCardNumber()+" is already present");
+        if (!userCard2.isEmpty())
+            throw new Exception("User with cardNo.: " + registerDto.getGroceryCardNumber() + " is already present");
 
         List<User> userAdhaar = userDao.findByAdhaar(registerDto.getAdhaar());
-        if(!userAdhaar.isEmpty())
-            throw new Exception("User with adhaar: "+registerDto.getAdhaar()+" is already present");
+        if (!userAdhaar.isEmpty())
+            throw new Exception("User with adhaar: " + registerDto.getAdhaar() + " is already present");
 
         List<User> userPan = userDao.findByPan(registerDto.getPan());
-        if(!userPan.isEmpty())
-            throw new Exception("User with pan: "+registerDto.getPan()+" is already present");
+        if (!userPan.isEmpty())
+            throw new Exception("User with pan: " + registerDto.getPan() + " is already present");
 
 
-        Role dbRole = roleDao.findById("USER").orElseThrow(()-> new Exception("Role not found"));
-        Set<Role> roleSet= new HashSet<>();
+        Role dbRole = roleDao.findById("USER").orElseThrow(() -> new Exception("Role not found"));
+        Set<Role> roleSet = new HashSet<>();
         roleSet.add(dbRole);
 
         User user = User.builder()
@@ -88,7 +88,11 @@ public class UserServiceImpl implements UserService {
 
         User save = userDao.save(user);
         emailService.sendWelcomeMail(user.getOtp(), registerDto.getEmail());
-        return ResponseUtils.createSuccessResponse(save, new TypeReference<User>() {});
+        return ResponseUtils.createSuccessResponse(save, new TypeReference<User>() {
+        });
+          }catch(Exception e){
+        return ResponseUtils.createFailure("No data found", 400);
+    }
     }
 
 
