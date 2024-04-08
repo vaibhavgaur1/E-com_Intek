@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -88,6 +89,11 @@ public class CartServiceImpl implements CartService {
 
             for (Cart cart : dbCartList) {
                 if (cart.getProduct().getCategory().getType().equalsIgnoreCase(cardType)) {
+                    Optional<FileUpload> dbFileUploadForProduct  = fileUploadRepository.findById(cart.getProduct().getUploadId());
+                    if (!dbFileUploadForProduct.isEmpty()) {
+                        cart.getProduct().setImage(helperUtils.getCompleteImage() + dbFileUploadForProduct.get().getPathURL());
+                        cart.getProduct().setImageUrl(helperUtils.getCompleteImage()+dbFileUploadForProduct.get().getPathURL());
+                    }
                     dbCartListSorted.add(cart);
                 }
             }
