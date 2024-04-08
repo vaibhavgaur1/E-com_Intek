@@ -101,8 +101,8 @@ public class WishlistServiceImpl implements WishlistService {
         return ResponseUtils.createSuccessResponse(dbWishList, new TypeReference<List<Wishlist>>() {});
     }
 
-//    public void deleteCartItem(Integer wishListId) {
-//        wishlistDao.deleteById(wishListId);
-//    }
+    public void deleteCartItem(Integer wishListId) {
+        wishlistDao.deleteById(wishListId);
+    }
 }
 

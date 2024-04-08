@@ -20,7 +20,7 @@ public class OrderDetailController {
 
     private final OrderDetailService orderDetailService;
 
-    @PreAuthorize("hasAuthority('USER')")
+//    @PreAuthorize("hasAuthority('USER')")
     @PostMapping("/placeOrder/{isSingleProductCheckout}")
     public ApiResponse<OrderDetail> placeOrder(
             @PathVariable Boolean isSingleProductCheckout,

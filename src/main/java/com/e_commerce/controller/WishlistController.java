@@ -23,20 +23,20 @@ public class WishlistController {
     private final WishlistService wishlistService;
 
     @GetMapping("/addToWishlist/{productId}")
-    @PreAuthorize("hasAuthority('USER')")
+//    @PreAuthorize("hasAuthority('USER')")
     public ApiResponse<Wishlist> addToWishlist(@PathVariable Integer productId, @RequestHeader("Authorization") String authHeader) throws Exception {
         return wishlistService.addToWishlist(productId, authHeader);
     }
 
-//    @DeleteMapping("/deleteWishlistItem/{wishListId}")
+    @DeleteMapping("/deleteWishlistItem/{wishListId}")
 //    @PreAuthorize("hasAuthority('USER')")
-//    public void deleteWishlistItem(@PathVariable Integer wishListId) throws Exception {
-//        wishlistService.deleteCartItem(wishListId);
-//    }
+    public void deleteWishlistItem(@PathVariable Integer wishListId) throws Exception {
+        wishlistService.deleteCartItem(wishListId);
+    }
 
 
     @GetMapping("/WishlistDetailsOfUser")
-    @PreAuthorize("hasAuthority('USER')")
+//    @PreAuthorize("hasAuthority('USER')")
     public ApiResponse<List<Wishlist>> getWishlistDetailsOfUser(@RequestHeader("Authorization") String authHeader) throws Exception {
         return wishlistService.getWishlistDetailsOfUser(authHeader);
     }

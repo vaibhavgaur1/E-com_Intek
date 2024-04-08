@@ -19,20 +19,20 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping("/addToCart/{productId}")
-    @PreAuthorize("hasAuthority('USER')")
+//    @PreAuthorize("hasAuthority('USER')")
     public ApiResponse<Cart> addToCart(@PathVariable Integer productId, @RequestHeader("Authorization") String authHeader) throws Exception {
         return cartService.addToCart(productId, authHeader);
     }
 
     @DeleteMapping("/deleteCartItem/{cartId}")
-    @PreAuthorize("hasAuthority('USER')")
+//    @PreAuthorize("hasAuthority('USER')")
     public void deleteCartItem(@PathVariable Integer cartId) throws Exception {
         cartService.deleteCartItem(cartId);
     }
 
 
     @GetMapping("/getCartDetailsOfUser/{cardType}")
-    @PreAuthorize("hasAuthority('USER')")
+//    @PreAuthorize("hasAuthority('USER')")
     public ApiResponse<List<Cart>> getCartDetailsOfUser(@PathVariable String cardType,@RequestHeader("Authorization") String authHeader) throws Exception {
         return cartService.getCartDetailsOfUser(cardType,authHeader);
     }

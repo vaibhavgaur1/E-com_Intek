@@ -12,7 +12,7 @@ public interface WishlistService {
     ApiResponse<Wishlist> addToWishlist(Integer productId, String authHeader) throws Exception;
 
     ApiResponse<List<Wishlist>> getWishlistDetailsOfUser(String authHeader) throws Exception;
-//    void deleteCartItem(Integer WishlistId);
+    void deleteCartItem(Integer WishlistId);
 }
 
 
