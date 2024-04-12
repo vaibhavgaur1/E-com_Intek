@@ -1,17 +1,10 @@
 package com.e_commerce.services.impl;
 
 import com.e_commerce.Dto.FileUpload;
-import com.e_commerce.Dto.ProductDto;
 import com.e_commerce._util.HelperUtils;
 import com.e_commerce._util.ResponseUtils;
-import com.e_commerce.dao.CartDao;
-import com.e_commerce.dao.CategoryRepository;
-import com.e_commerce.dao.FileUploadRepository;
-import com.e_commerce.dao.ProductDao;
-import com.e_commerce.entity.Cart;
-import com.e_commerce.entity.Category;
-import com.e_commerce.entity.Product;
-import com.e_commerce.entity.User;
+import com.e_commerce.dao.*;
+import com.e_commerce.entity.*;
 import com.e_commerce.request.AddProductRequest;
 import com.e_commerce.response.AddProductResponse;
 import com.e_commerce.response.ApiResponse;
@@ -21,14 +14,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,12 +36,13 @@ public class ProductServiceImpl implements ProductService {
 
         return ResponseUtils.createSuccessResponse(productDao.save(product), new TypeReference<Product>() {});
     }
-
-    public ApiResponse<List<Product>> getAllProducts(String cardType,String searchKey)
+    private final WishlistDao wishlistDao;
+    public ApiResponse<List<Product>> getAllProducts(String authHeader, String cardType, String searchKey) throws Exception
 //    Integer pageNumber, Integer pageSize, String searchKey
     {
 //        Pageable pageable= PageRequest.of(pageNumber, pageSize);
-
+        User dbUser = helperUtils.getUserFromAuthToken(authHeader);
+        List<Wishlist> dbWishList = wishlistDao.findByUser(dbUser);
         if(searchKey== null || searchKey.isEmpty() || searchKey.isBlank())
         {
             List<Product> dbProducts=(List<Product>) productDao.findAllByCategoryType(cardType);
@@ -62,6 +50,13 @@ public class ProductServiceImpl implements ProductService {
             List<Product> withImage= new ArrayList<>();
             dbProducts.forEach(dbProduct->{
                 Optional<FileUpload> dbFileUploadForProduct  = fileUploadRepository.findById(dbProduct.getUploadId());
+                boolean wishFlag=false;
+                for (Wishlist wishlist : dbWishList){
+                    if(wishlist.getProduct().getProductId()==dbProduct.getProductId()){
+                        wishFlag=true;
+                    }
+                }
+                dbProduct.setWishlist(wishFlag);
                 if (!dbFileUploadForProduct.isEmpty()) {
                     dbProduct.setImage(helperUtils.getCompleteImage() + dbFileUploadForProduct.get().getPathURL());
                     dbProduct.setImageUrl(helperUtils.getCompleteImage()+dbFileUploadForProduct.get().getPathURL());

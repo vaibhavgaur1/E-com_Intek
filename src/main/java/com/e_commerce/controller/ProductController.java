@@ -59,13 +59,13 @@ public class ProductController {
 
     //    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getAllProducts/{cardType}")
-    public ApiResponse<List<Product>> getAllProducts(@PathVariable String cardType,
+    public ApiResponse<List<Product>> getAllProducts(@RequestHeader("Authorization") String authHeader,@PathVariable String cardType,
 //                                                     @RequestParam(defaultValue = "0")Integer pageNumber,
 //                                                     @RequestParam(defaultValue = "6")Integer pageSize,
                                                      @RequestParam(defaultValue = "")String searchKey
-    ){
+    ) throws Exception {
         System.out.println(searchKey);
-        return productService.getAllProducts(cardType,searchKey);   //pageNumber, pageSize, searchKey
+        return productService.getAllProducts(authHeader,cardType,searchKey);   //pageNumber, pageSize, searchKey
     }
 
     //    @PreAuthorize("hasAuthority('ADMIN')")

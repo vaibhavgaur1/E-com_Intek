@@ -1,6 +1,5 @@
 package com.e_commerce.services;
 
-import com.e_commerce.Dto.ProductDto;
 import com.e_commerce.entity.Product;
 import com.e_commerce.request.AddProductRequest;
 import com.e_commerce.response.AddProductResponse;
@@ -12,7 +11,7 @@ public interface ProductService {
 
     ApiResponse<Product> saveProduct(Product product);
 
-    ApiResponse<List<Product>> getAllProducts(String cardType,String searchKey);    //Integer pageNumber, Integer pageSize, String searchKey
+    ApiResponse<List<Product>> getAllProducts(String authHeader, String cardType, String searchKey) throws Exception;    //Integer pageNumber, Integer pageSize, String searchKey
 
     void deleteProductDetails(Integer productId);
 
