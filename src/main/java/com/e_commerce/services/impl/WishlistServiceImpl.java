@@ -9,6 +9,7 @@ import com.e_commerce.dao.ProductDao;
 import com.e_commerce.dao.WishlistDao;
 //import com.e_commerce.dto.FileUpload;
 import com.e_commerce.Dto.FileUpload;
+import com.e_commerce.entity.Cart;
 import com.e_commerce.entity.Product;
 import com.e_commerce.entity.User;
 import com.e_commerce.entity.Wishlist;
@@ -19,7 +20,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -83,22 +86,33 @@ public class WishlistServiceImpl implements WishlistService {
         });
         return ResponseUtils.createSuccessResponse(dbWishList, new TypeReference<List<Wishlist>>() {});
     }
-
+    private final FileUploadRepository fileUploadRepository;
     public ApiResponse<List<Wishlist>> getWishlistDetailsOfUser(String authHeader) throws Exception {
         User dbUser = helperUtils.getUserFromAuthToken(authHeader);
         List<Wishlist> dbWishList = wishlistDao.findByUser(dbUser);
-        dbWishList.forEach(dbWish-> {
-            FileUpload dbFileUploadForProduct = null;
-            try {
-                dbFileUploadForProduct = fileUploRepository.findById(dbWish.getProduct().getUploadId())
-                        .orElseThrow(()->new Exception("no image url found"));
-//                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
-//                dbWish.getProduct().setImage(file);
-            } catch (Exception e) {
-                throw new RuntimeException("no image url found");
-            }
-        });
-        return ResponseUtils.createSuccessResponse(dbWishList, new TypeReference<List<Wishlist>>() {});
+        List<Wishlist> dbWishListFinal = new ArrayList<>();
+        for (Wishlist wishlist : dbWishList) {
+
+                Optional<FileUpload> dbFileUploadForProduct  = fileUploadRepository.findById(wishlist.getProduct().getUploadId());
+                if (!dbFileUploadForProduct.isEmpty()) {
+                    wishlist.getProduct().setImage(helperUtils.getCompleteImage() + dbFileUploadForProduct.get().getPathURL());
+                    wishlist.getProduct().setImageUrl(helperUtils.getCompleteImage()+dbFileUploadForProduct.get().getPathURL());
+                }
+            dbWishListFinal.add(wishlist);
+
+        }
+//        dbWishList.forEach(dbWish-> {
+//            FileUpload dbFileUploadForProduct = null;
+//            try {
+//                dbFileUploadForProduct = fileUploRepository.findById(dbWish.getProduct().getUploadId())
+//                        .orElseThrow(()->new Exception("no image url found"));
+////                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
+////                dbWish.getProduct().setImage(file);
+//            } catch (Exception e) {
+//                throw new RuntimeException("no image url found");
+//            }
+//        });
+        return ResponseUtils.createSuccessResponse(dbWishListFinal, new TypeReference<List<Wishlist>>() {});
     }
 
     public void deleteCartItem(Integer wishListId) {
