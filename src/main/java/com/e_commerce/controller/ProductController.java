@@ -5,6 +5,7 @@ import com.e_commerce.entity.Product;
 import com.e_commerce.request.AddProductRequest;
 import com.e_commerce.response.ApiResponse;
 import com.e_commerce.response.AddProductResponse;
+import com.e_commerce.response.ProductResponse;
 import com.e_commerce.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -59,10 +60,10 @@ public class ProductController {
 
     //    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/getAllProducts/{cardType}")
-    public ApiResponse<List<Product>> getAllProducts(@RequestHeader("Authorization") String authHeader,@PathVariable String cardType,
+    public ApiResponse<List<ProductResponse>> getAllProducts(@RequestHeader("Authorization") String authHeader, @PathVariable String cardType,
 //                                                     @RequestParam(defaultValue = "0")Integer pageNumber,
 //                                                     @RequestParam(defaultValue = "6")Integer pageSize,
-                                                     @RequestParam(defaultValue = "")String searchKey
+                                                             @RequestParam(defaultValue = "")String searchKey
     ) throws Exception {
         System.out.println(searchKey);
         return productService.getAllProducts(authHeader,cardType,searchKey);   //pageNumber, pageSize, searchKey

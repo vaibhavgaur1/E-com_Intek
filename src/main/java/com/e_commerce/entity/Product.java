@@ -30,7 +30,6 @@ public class Product {
     private Double productDiscountedPrice;
     private Double productActualPrice;
     private String imageUrl;
-    private boolean isWishlist;
 //
 //    @Column(unique = true)
 //    private String uploadDocId;

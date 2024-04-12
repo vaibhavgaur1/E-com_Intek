@@ -8,6 +8,7 @@ import com.e_commerce.entity.*;
 import com.e_commerce.request.AddProductRequest;
 import com.e_commerce.response.AddProductResponse;
 import com.e_commerce.response.ApiResponse;
+import com.e_commerce.response.ProductResponse;
 import com.e_commerce.services.FetchImage;
 import com.e_commerce.services.ProductService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -29,6 +30,7 @@ public class ProductServiceImpl implements ProductService {
     private final CartDao cartDao;
     private final CategoryRepository categoryRepository;
     private final FileUploadRepository fileUploadRepository;
+    private final WishlistDao wishlistDao;
     @Autowired
     private ProductDao product;
     @SneakyThrows
@@ -36,10 +38,11 @@ public class ProductServiceImpl implements ProductService {
 
         return ResponseUtils.createSuccessResponse(productDao.save(product), new TypeReference<Product>() {});
     }
-    private final WishlistDao wishlistDao;
-    public ApiResponse<List<Product>> getAllProducts(String authHeader, String cardType, String searchKey) throws Exception
+
+    public ApiResponse<List<ProductResponse>> getAllProducts(String authHeader, String cardType, String searchKey) throws Exception
 //    Integer pageNumber, Integer pageSize, String searchKey
     {
+        List<ProductResponse> response= new ArrayList<ProductResponse>();
 //        Pageable pageable= PageRequest.of(pageNumber, pageSize);
         User dbUser = helperUtils.getUserFromAuthToken(authHeader);
         List<Wishlist> dbWishList = wishlistDao.findByUser(dbUser);
@@ -47,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
         {
             List<Product> dbProducts=(List<Product>) productDao.findAllByCategoryType(cardType);
             System.out.println(dbProducts.size());
-            List<Product> withImage= new ArrayList<>();
+
             dbProducts.forEach(dbProduct->{
                 Optional<FileUpload> dbFileUploadForProduct  = fileUploadRepository.findById(dbProduct.getUploadId());
                 boolean wishFlag=false;
@@ -56,17 +59,21 @@ public class ProductServiceImpl implements ProductService {
                         wishFlag=true;
                     }
                 }
-                dbProduct.setWishlist(wishFlag);
-                if (!dbFileUploadForProduct.isEmpty()) {
-                    dbProduct.setImage(helperUtils.getCompleteImage() + dbFileUploadForProduct.get().getPathURL());
-                    dbProduct.setImageUrl(helperUtils.getCompleteImage()+dbFileUploadForProduct.get().getPathURL());
-                }
-//                byte[] file = fetchImage.getFile(dbFileUploadForProduct.getPathURL());
-
-//                withImage.add(dbProduct);
+                ProductResponse product=new ProductResponse();
+                product.setProductId(dbProduct.getProductId());
+                product.setProductDescription(dbProduct.getProductDescription());
+                product.setProductName(dbProduct.getProductName());
+                product.setCategory(dbProduct.getCategory());
+                product.setProductActualPrice(dbProduct.getProductActualPrice());
+                product.setProductDiscountedPrice(dbProduct.getProductDiscountedPrice());
+                product.setImageUrl(helperUtils.getCompleteImage() + dbFileUploadForProduct.get().getPathURL());
+                product.setImage(helperUtils.getCompleteImage()+dbFileUploadForProduct.get().getPathURL());
+                product.setWishList(wishFlag);
+                product.setUploadId(dbProduct.getUploadId());
+                response.add(product);
             });
 
-            return ResponseUtils.createSuccessResponse(dbProducts, new TypeReference<List<Product>>() {});
+            return ResponseUtils.createSuccessResponse(response, new TypeReference<List<ProductResponse>>() {});
         }
         else{
             List<Product> dbProducts = productDao
@@ -94,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
 
 
 
-            return ResponseUtils.createSuccessResponse(dbProducts, new TypeReference<List<Product>>() {});
+            return ResponseUtils.createSuccessResponse(response, new TypeReference<List<ProductResponse>>() {});
         }
     }
 

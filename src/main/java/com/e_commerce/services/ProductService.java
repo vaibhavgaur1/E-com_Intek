@@ -4,6 +4,7 @@ import com.e_commerce.entity.Product;
 import com.e_commerce.request.AddProductRequest;
 import com.e_commerce.response.AddProductResponse;
 import com.e_commerce.response.ApiResponse;
+import com.e_commerce.response.ProductResponse;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface ProductService {
 
     ApiResponse<Product> saveProduct(Product product);
 
-    ApiResponse<List<Product>> getAllProducts(String authHeader, String cardType, String searchKey) throws Exception;    //Integer pageNumber, Integer pageSize, String searchKey
+    ApiResponse<List<ProductResponse>> getAllProducts(String authHeader, String cardType, String searchKey) throws Exception;    //Integer pageNumber, Integer pageSize, String searchKey
 
     void deleteProductDetails(Integer productId);
 
